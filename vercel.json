@@ -1,0 +1,17 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "microsite-bali": true
+    }
+  },
+  "redirects": [
+    { "source": "/india-itinerary", "destination": "/#/india-itinerary", "permanent": false },
+    { "source": "/japan-itinerary", "destination": "/#/japan-itinerary", "permanent": false },
+    { "source": "/srilanka-itinerary", "destination": "/#/srilanka-itinerary", "permanent": false },
+    { "source": "/philippines-itinerary", "destination": "/#/philippines-itinerary", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
