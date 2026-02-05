@@ -153,7 +153,7 @@ export const baliData = {
       heroImage: day01,
       description:
         "Welcome to Bali, baby! ✈️🌴 Get picked up from the airport, check into your hotel, and switch instantly into island mode. Spend the afternoon chilling by the pool, dipping your toes in the ocean, or exploring nearby beach streets before we kick things off with our welcome dinner — drinks flowing, laughs guaranteed, friendships officially forming.",
-      meals: "Dinner",
+
       accommodation: { name: "Koa D Surfer, Canggu" },
       highlights: "Sunset beach walks, poolside lounging, Canggu shopping spree",
       transportation: {
@@ -250,7 +250,7 @@ export const baliData = {
       heroImage: day09,
       description:
         "Cycle around the island, explore hidden beaches, and hike up to Gili's best viewpoint for a final pinch-me moment. Tonight, we wrap things up with a farewell dinner and last big night out, memories made, group chat forever activated.",
-      meals: "Breakfast, Dinner",
+      meals: "Breakfast",
       accommodation: { name: "Trawangan Nirvana, Gili Trawangan" },
       highlights:
         "Bicycle island tour, viewpoint hike, farewell dinner, final night out",
@@ -281,7 +281,7 @@ export const baliData = {
     },
     {
       title: "Meals",
-      items: [{ text: "Daily breakfasts" }, { text: "Welcome dinner" }, { text: "Farewell dinner" }],
+      items: [{ text: "Daily breakfasts" }, { text: "1 Lunch" }],
     },
     {
       title: "Transportation",

@@ -3,33 +3,26 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/common/Footer";
 import { Scale, Shield, AlertCircle } from "lucide-react";
 
+const BRAND_TEAL = "#0FC2BF";
+
+/* =========================
+   SECTIONS 1 ONLY (CUSTOM)
+========================= */
+const SECTION_ONE = {
+  title: "1. Booking & Payment",
+  content: [
+    "Deposit (non-refundable): Your spot is confirmed once the USD $300 deposit is received.",
+    "Balance: The remaining balance is due no later than 60 days before the tour start date.",
+    "All prices are quoted and charged in United States Dollars (USD).",
+    "The traveler who paid a deposit may assign or transfer that deposit and booking to another person by written notice with the new traveler’s full name and contact details. Transfer is only permitted to the same tour date and may be subject to any third-party change fees.",
+    "You must be 18 years or older to make a booking."
+  ]
+};
+
+/* =========================
+   SECTIONS 3–18 (UPDATED)
+========================= */
 const TERMS_SECTIONS = [
-  {
-    title: "1. Booking & Payment",
-    content: [
-      "Deposit (non-refundable): Your spot is confirmed once the USD $250 deposit is received.",
-      "Balance: The remaining balance is due no later than 90 days before the tour start date.",
-      "All prices are quoted and charged in United States Dollars (USD).",
-      "You must be 18 years or older to make a booking."
-    ]
-  },
-  {
-    title: "2. Refunds & Cancellations",
-    content: [
-      [
-        "Client-initiated cancellations:",
-        "More than 90 days before the tour start date: 100% refund of amounts paid, minus the non-refundable booking fee (deposit) and any non-recoverable third-party costs.",
-        "90 days or fewer before the tour start date: No refunds will be issued. All payments, including deposits, are forfeited.",
-        "No refunds will be provided for late arrival, early departure, missed services, flight disruptions, illness, personal circumstances, weather conditions, change of mind, or if a guest chooses to leave the trip early or withdraw from the tour after it has commenced.",
-        "Non-recoverable costs may include, but are not limited to, accommodation deposits, internal flights, ground transportation, guides, permits, and other third-party services."
-      ],
-      [
-        "Imagine Beyond Travel cancellations:",
-        "If Imagine Beyond Travel (IBT) cancels a tour for any reason, a full refund of all amounts paid directly to IBT will be issued.",
-        "Tours are subject to minimum participant numbers and may be cancelled if minimum requirements are not met."
-      ]
-    ]
-  },
   {
     title: "3. Travel & Medical Insurance (Mandatory)",
     content: [
@@ -93,7 +86,7 @@ const TERMS_SECTIONS = [
     title: "10. Assumption of Risk",
     content: [
       "You acknowledge that our trips may involve inherent risks, including travel in locations with different political, cultural, environmental, and weather conditions.",
-      "We monitor local conditions and you agree to follow all safety instructions provided by trip leaders and local partners."
+      "You agree to follow all safety instructions provided by trip leaders and local partners."
     ]
   },
   {
@@ -106,15 +99,15 @@ const TERMS_SECTIONS = [
     title: "12. Force Majeure & Extraordinary Events",
     content: [
       "IBT is not liable for delays, changes, or cancellations caused by events beyond its control, including natural disasters, pandemics, government actions, civil unrest, supplier failure, or transportation disruptions.",
-      "IBT may, acting reasonably and in good faith, modify, suspend, shorten, or cancel tours where required for safety, operational, legal, or force majeure reasons, or where minimum participation requirements are not met.",
+      "IBT may modify, suspend, shorten, or cancel tours where required for safety, operational, legal, or force majeure reasons.",
       "No refunds will be issued for fear of travel, perceived risk, or media coverage where the tour continues lawfully."
     ]
   },
   {
     title: "13. External / Independent Activities",
     content: [
-      "Activities not arranged by Imagine Beyond Travel, including those booked during free time, are undertaken at your own risk.",
-      "Imagine Beyond Travel is not liable for damages, losses, or inconveniences arising from independently booked activities."
+      "Activities not arranged by Imagine Beyond Travel are undertaken at your own risk.",
+      "IBT is not liable for damages or losses arising from independently booked activities."
     ]
   },
   {
@@ -150,168 +143,88 @@ const TERMS_SECTIONS = [
   }
 ];
 
-const BRAND_TEAL = "#0FC2BF";
-
-const TermsConditions = React.memo(() => {
+const TermsConditions = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary/10 to-primary/5 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="bg-primary/20 rounded-full p-4">
-              <Scale className="w-12 h-12 text-primary" />
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Terms & Conditions
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+      {/* Hero */}
+      <section className="py-20 bg-gradient-to-r from-primary/10 to-primary/5 text-center">
+        <div className="max-w-4xl mx-auto px-4">
+          <Scale className="mx-auto w-12 h-12 text-primary mb-6" />
+          <h1 className="text-4xl font-bold mb-6">Terms & Conditions</h1>
+          <p className="text-muted-foreground text-lg">
             Please read these terms carefully before booking your travel with Imagine Beyond Travel.
           </p>
         </div>
       </section>
 
-      {/* Intro */}
+      {/* Terms */}
       <section className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-card rounded-lg p-8 border border-border">
-            <div className="flex items-start space-x-3 mb-4">
-              <AlertCircle className="w-6 h-6 text-primary mt-0.5" />
-              <div>
-                <h2 className="text-xl font-semibold text-card-foreground mb-3">Important Notice</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  By booking a trip with Imagine Beyond Travel, you agree to be bound by these Terms &amp; Conditions.
-                  These terms form a binding agreement between you and Imagine Beyond Travel.
-                  Please review them carefully and contact us with any questions before booking.
-                </p>
-              </div>
-            </div>
+        <div className="max-w-4xl mx-auto px-4 space-y-8">
+          <style>{`:root { --brand-teal: ${BRAND_TEAL}; }`}</style>
+
+          {/* Section 1 */}
+          <div className="bg-card p-8 border rounded-lg">
+            <h3 className="text-xl font-semibold mb-6 flex items-center">
+              <Shield className="w-5 h-5 mr-3 text-primary" />
+              {SECTION_ONE.title}
+            </h3>
+            <ul className="list-disc pl-6 space-y-3 marker:text-[var(--brand-teal)]">
+              {SECTION_ONE.content.map((item, i) => (
+                <li key={i} className="text-muted-foreground">{item}</li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
 
-      {/* Terms List */}
-      <section className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-8">
-            {TERMS_SECTIONS.map((section, index) => (
-              <div key={index} className="bg-card rounded-lg p-8 border border-border">
-                <h3 className="text-xl font-semibold text-card-foreground mb-6 flex items-center">
-                  <Shield className="w-5 h-5 text-primary mr-3" />
-                  {section.title}
-                </h3>
+          {/* Section 2 */}
+<div className="bg-card p-8 border rounded-lg">
+  <h3 className="text-xl font-semibold mb-6 flex items-center">
+    <Shield className="w-5 h-5 mr-3 text-primary" />
+    2. Refunds & Cancellations
+  </h3>
 
-                {/* Normal sections: simple bullet list with brand-teal markers */}
-                {index !== 1 ? (
-                  <ul className="list-disc pl-6 space-y-3 marker:text-[var(--brand-teal)]">
-                    <style>{`:root { --brand-teal: ${BRAND_TEAL}; }`}</style>
-                    {(section.content as string[]).map((item, i) => (
-                      <li key={i} className="text-muted-foreground leading-relaxed">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  // Refunds & Cancellations: sub-headings (no bullets) + their own bullet lists
-                  <div className="space-y-6">
-                    {/* Client-initiated cancellations */}
-                    <div>
-                      <div className="text-muted-foreground font-medium leading-relaxed">
-                        Client-initiated cancellations:
-                      </div>
-                      <ul className="mt-2 list-disc pl-6 space-y-2 marker:text-[var(--brand-teal)]">
-                        <style>{`:root { --brand-teal: ${BRAND_TEAL}; }`}</style>
-                        <li className="text-muted-foreground leading-relaxed">
-                          More than 90 days before the tour start date: 100% refund of amounts paid, minus the
-                          non-refundable booking fee (deposit) and any non-recoverable third-party costs.
-                        </li>
-                        <li className="text-muted-foreground leading-relaxed">
-                          90 days or fewer before the tour start date: No refunds will be issued. All payments,
-                          including deposits, are forfeited.
-                        </li>
-                        <li className="text-muted-foreground leading-relaxed">
-                          No refunds will be provided for late arrival, early departure, missed services, flight
-                          disruptions, illness, personal circumstances, weather conditions, change of mind, or if a guest
-                          chooses to leave the trip early or withdraw from the tour after it has commenced.
-                        </li>
-                        <li className="text-muted-foreground leading-relaxed">
-                          Non-recoverable costs may include, but are not limited to, accommodation deposits, internal
-                          flights, ground transportation, guides, permits, and other third-party services.
-                        </li>
-                      </ul>
-                    </div>
+  <ul className="list-disc pl-6 space-y-3 marker:text-[var(--brand-teal)]">
+    <li className="text-muted-foreground">
+      All deposits and balance payments made to Imagine Beyond Travel are non-refundable,
+      except where Imagine Beyond Travel cancels the trip. This includes, but is not limited
+      to, circumstances where a traveler is unable to attend the tour for personal, medical,
+      or scheduling reasons.
+    </li>
 
-                    {/* IBT cancellations */}
-                    <div>
-                      <div className="text-muted-foreground font-medium leading-relaxed">
-                        Imagine Beyond Travel cancellations:
-                      </div>
-                      <ul className="mt-2 list-disc pl-6 space-y-2 marker:text-[var(--brand-teal)]">
-                        <li className="text-muted-foreground leading-relaxed">
-                          If Imagine Beyond Travel (IBT) cancels a tour for any reason, a full refund of all amounts
-                          paid directly to IBT will be issued.
-                        </li>
-                        <li className="text-muted-foreground leading-relaxed">
-                          Tours are subject to minimum participant numbers and may be cancelled if minimum requirements
-                          are not met.
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    <li className="text-muted-foreground">
+      If Imagine Beyond Travel cancels the trip for any reason, you will receive a 100% refund
+      of all amounts paid to Imagine Beyond Travel.
+    </li>
 
-      {/* Governance */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card rounded-lg p-6 border border-border">
-              <h3 className="text-lg font-semibold text-card-foreground mb-4">Governing Law</h3>
-              <p className="text-muted-foreground">
-                These Terms &amp; Conditions are governed by the laws of the State of Colorado, USA. Any disputes shall be
-                subject to the exclusive jurisdiction of Colorado courts.
-              </p>
+    <li className="text-muted-foreground">
+      Guests unable to travel may transfer their booking to another eligible participant,
+      subject to full payment, acceptance of these Terms & Conditions, and any applicable fees.
+    </li>
+  </ul>
+</div>
+
+
+          {/* Sections 3–18 */}
+          {TERMS_SECTIONS.map(section => (
+            <div key={section.title} className="bg-card p-8 border rounded-lg">
+              <h3 className="text-xl font-semibold mb-6 flex items-center">
+                <Shield className="w-5 h-5 mr-3 text-primary" />
+                {section.title}
+              </h3>
+              <ul className="list-disc pl-6 space-y-3 marker:text-[var(--brand-teal)]">
+                {section.content.map((item, i) => (
+                  <li key={i} className="text-muted-foreground">{item}</li>
+                ))}
+              </ul>
             </div>
-            <div className="bg-card rounded-lg p-6 border border-border">
-              <h3 className="text-lg font-semibold text-card-foreground mb-4">Changes to Terms</h3>
-              <p className="text-muted-foreground">
-                We may modify these Terms &amp; Conditions at any time. Updated terms will be posted on our website and
-                will apply to bookings made after the effective date of the change.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Questions About These Terms?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            If you have questions about our Terms &amp; Conditions, please reach out to our team.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <div className="border" style={{ borderColor: BRAND_TEAL }}>
-              <div className="px-8 py-3 rounded-lg font-semibold" style={{ color: BRAND_TEAL }}>
-                📧 Email: bookings@imaginebeyondtravel.com
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
       <Footer />
     </div>
   );
-});
-
-TermsConditions.displayName = "TermsConditions";
+};
 
 export default TermsConditions;

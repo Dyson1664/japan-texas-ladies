@@ -11,7 +11,6 @@ import Footer from "@/components/common/Footer"; // <-- keep YOUR other project 
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -25,6 +24,11 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+
+/**
+ * ✅ Toggle payments (set to true when you’re ready to enable Shopify)
+ */
+const PAYMENTS_ENABLED = false;
 
 /**
  * ✅ Config by slug: /booking/japan or /booking/colombia
@@ -52,7 +56,6 @@ const BOOKING_CONFIG: Record<
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
 
-  // ✅ ADD THIS
   bali: {
     countryName: "Bali",
     variantId: "45218593964211",
@@ -60,7 +63,6 @@ const BOOKING_CONFIG: Record<
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
 };
-
 
 function buildShopifyCartUrl(params: {
   shopifyDomain: string;
@@ -81,16 +83,13 @@ function buildShopifyCartUrl(params: {
 }
 
 /**
- * ✅ Base schema (same idea as your old booking page)
- * Includes address like your other project.
+ * ✅ Base schema
  */
 const baseSchema = z.object({
   fullName: z.string().trim().min(1, "Full name is required").max(100),
   email: z.string().trim().email("Please enter a valid email address").max(255),
   mobile: z.string().trim().min(1, "Mobile number is required").max(30),
   instagram: z.string().trim().max(50).optional().or(z.literal("")),
-
-
   termsAccepted: z.literal(true, {
     errorMap: () => ({ message: "You must accept the terms and conditions" }),
   }),
@@ -202,7 +201,6 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ scroll to top on load (same as TBFF)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -258,6 +256,15 @@ export default function BookingPage() {
   }
 
   const onSubmit = (data: BookingFormData) => {
+    // Keep validation + submit behavior, but prevent payment redirect.
+    // You can later flip PAYMENTS_ENABLED=true to enable Shopify again.
+    if (!PAYMENTS_ENABLED) {
+      setIsSubmitting(false);
+      // Optional: you could show a toast here if you have one.
+      // For now, we just do nothing.
+      return;
+    }
+
     setIsSubmitting(true);
 
     const attributes: Record<string, string> = {
@@ -289,6 +296,8 @@ export default function BookingPage() {
     window.location.href = checkoutUrl;
   };
 
+  const paymentDisabled = !PAYMENTS_ENABLED;
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -314,7 +323,11 @@ export default function BookingPage() {
                     <FormItem>
                       <FormLabel>Full Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your full name" {...field} className="h-11" />
+                        <Input
+                          placeholder="Enter your full name"
+                          {...field}
+                          className="h-11"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -326,9 +339,14 @@ export default function BookingPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Email Address *</FormLabel>
+                      <FormLabel>Email Address *</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="your@email.com" {...field} className="h-11" />
+                        <Input
+                          type="email"
+                          placeholder="your@email.com"
+                          {...field}
+                          className="h-11"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -342,7 +360,12 @@ export default function BookingPage() {
                     <FormItem>
                       <FormLabel>Mobile Number *</FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="+1 234 567 8900" {...field} className="h-11" />
+                        <Input
+                          type="tel"
+                          placeholder="+1 234 567 8900"
+                          {...field}
+                          className="h-11"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -356,15 +379,16 @@ export default function BookingPage() {
                     <FormItem>
                       <FormLabel>Instagram Handle (Optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="@yourusername" {...field} className="h-11" />
+                        <Input
+                          placeholder="@yourusername"
+                          {...field}
+                          className="h-11"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-
-
 
                 {config.requiresPassport && (
                   <div className="pt-4 border-t border-border">
@@ -456,7 +480,10 @@ export default function BookingPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-2">
                       <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-sm font-normal cursor-pointer">
@@ -479,14 +506,24 @@ export default function BookingPage() {
                 <Button
                   type="submit"
                   className="w-full h-12 text-base font-semibold mt-6"
-                  disabled={!isValid || isSubmitting}
+                  disabled={!isValid || isSubmitting || paymentDisabled}
                 >
-                  {isSubmitting ? "Redirecting..." : "Continue to Payment"}
+                  {paymentDisabled
+                    ? "Payments Opening Soon"
+                    : isSubmitting
+                    ? "Redirecting..."
+                    : "Continue to Payment"}
                 </Button>
 
-                <p className="text-xs text-muted-foreground text-center pt-2">
-                  You will be redirected to Shopify checkout.
-                </p>
+                {paymentDisabled ? (
+                  <p className="text-xs text-muted-foreground text-center pt-2">
+                    Payments are not enabled yet — check back soon.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground text-center pt-2">
+                    You will be redirected to Shopify checkout.
+                  </p>
+                )}
               </form>
             </Form>
           </div>
