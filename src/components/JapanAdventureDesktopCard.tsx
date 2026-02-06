@@ -35,16 +35,16 @@ const details = [
 
 export default function JapanAdventureDesktopCard() {
   return (
-    <section className="mx-auto w-full max-w-[1500px] px-5 py-6 lg:px-8">
-      <div className="mb-5 flex items-start justify-between gap-5">
+    <section className="mx-auto w-full max-w-[1420px] px-5 py-5 lg:px-7">
+      <div className="mb-4 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-5xl font-extrabold lg:text-6xl leading-none tracking-tight text-slate-900">Japan Adventure</h1>
+          <h1 className="text-4xl font-extrabold lg:text-5xl leading-none tracking-tight text-slate-900">Japan Adventure</h1>
 
-          <div className="mt-5 flex flex-wrap items-center gap-2.5">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
             {tags.map(({ icon: Icon, label }) => (
               <span
                 key={label}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-3.5 py-1.5 text-sm lg:text-base font-semibold text-teal-900 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-3 py-1.5 text-sm lg:text-[15px] font-semibold text-teal-900 shadow-sm"
               >
                 <Icon className="h-4 w-4 lg:h-5 lg:w-5 text-teal-700" />
                 {label}
@@ -52,7 +52,7 @@ export default function JapanAdventureDesktopCard() {
             ))}
           </div>
 
-          <div className="mt-4 flex items-center gap-6 text-2xl font-semibold text-slate-800 lg:text-[30px]">
+          <div className="mt-3 flex items-center gap-5 text-xl font-semibold text-slate-800 lg:text-[26px]">
             {details.map(({ icon: Icon, label, underlined }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-slate-700" />
@@ -62,21 +62,21 @@ export default function JapanAdventureDesktopCard() {
           </div>
         </div>
 
-        <div className="min-w-[300px] pt-1 text-right">
-          <p className="text-2xl text-slate-700">
-            From <span className="text-5xl font-extrabold lg:text-6xl text-slate-900">€1,999</span> EUR
+        <div className="min-w-[280px] pt-1 text-right">
+          <p className="text-xl text-slate-700">
+            From <span className="text-4xl font-extrabold lg:text-5xl text-slate-900">€1,999</span> EUR
           </p>
           <button
             type="button"
-            className="mt-4 rounded-full bg-[#FFA171] px-8 py-4 text-xl font-bold text-slate-900 transition hover:brightness-95"
+            className="mt-3 rounded-full bg-[#FFA171] px-7 py-3 text-lg font-bold text-slate-900 transition hover:brightness-95"
           >
             Check available start dates
           </button>
         </div>
       </div>
 
-      <div className="mx-auto w-full overflow-hidden rounded-[26px] md:w-[94%] lg:w-[92%] xl:w-[90%]">
-        <div className="grid h-[580px] grid-cols-12 grid-rows-2 gap-1 bg-white xl:h-[620px]">
+      <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
+        <div className="grid h-[460px] grid-cols-12 grid-rows-2 gap-1 bg-white lg:h-[500px] xl:h-[530px]">
           <img src={japanDay01Group} alt="Tokyo metro platform" className="col-span-3 row-span-2 h-full w-full object-cover" />
           <img src={japanDay03Group} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
           <img src={japanTokyo} alt="Traveler in Tokyo at night" className="col-span-4 h-full w-full object-cover" />
