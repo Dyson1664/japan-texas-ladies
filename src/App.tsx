@@ -9,17 +9,12 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import FAQs from "./pages/FAQs";
 import TermsConditions from "./pages/TermsConditions";
-
-
-import { ItineraryTemplate } from "@/components/ItineraryTemplate";
-import { baliData } from "@/data/countries/bali";
+import JapanAdventureCardPreview from "./pages/JapanAdventureCardPreview";
 
 import BookingPage from "./pages/booking/BookingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
-
-const BaliItineraryInline = () => <ItineraryTemplate data={baliData} />;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -28,14 +23,15 @@ const App = () => (
       <Sonner />
       <AppRouter>
         <Routes>
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/faqs" element={<FAQs />} />
-        <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/terms" element={<TermsConditions />} />
 
-          <Route path="/" element={<BaliItineraryInline />} />
-          <Route path="/bali-itinerary" element={<BaliItineraryInline />} />
+          <Route path="/" element={<JapanAdventureCardPreview />} />
+          <Route path="/bali-itinerary" element={<JapanAdventureCardPreview />} />
           <Route path="/booking/:slug" element={<BookingPage />} />
+          <Route path="/japan-adventure-preview" element={<JapanAdventureCardPreview />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppRouter>
