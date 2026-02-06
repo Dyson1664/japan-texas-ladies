@@ -20,7 +20,7 @@ const tags: Tag[] = [
 ];
 
 const details = [
-  { icon: CalendarDays, label: "13 days" },
+  { icon: CalendarDays, label: "8 days" },
   { icon: MapPin, label: "Tokyo - Kyoto", underlined: true },
 ];
 
@@ -68,12 +68,12 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
             <p className="text-lg text-slate-700">
               From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">€1,999</span> EUR
             </p>
-            <button
-              type="button"
-              className="mt-2 rounded-full bg-[#0fc2bf] px-6 py-2.5 text-base font-bold text-white transition hover:brightness-95"
-            >
-              Check available start dates
-            </button>
+          <button
+            type="button"
+            className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
+          >
+            Reserve Now
+          </button>
           </div>
         </div>
       </div>
