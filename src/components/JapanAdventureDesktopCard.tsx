@@ -24,7 +24,11 @@ const details = [
   { icon: MapPin, label: "Tokyo - Kyoto", underlined: true },
 ];
 
-export default function JapanAdventureDesktopCard() {
+type JapanAdventureDesktopCardProps = {
+  leftMediaVideoSrc?: string;
+};
+
+export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAdventureDesktopCardProps) {
   return (
     <section className="w-full px-5 py-5">
       <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
@@ -76,7 +80,22 @@ export default function JapanAdventureDesktopCard() {
 
       <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
         <div className="grid h-[460px] grid-cols-12 grid-rows-2 gap-1 bg-white lg:h-[500px] xl:h-[530px]">
-          <img src={japanDay01Group} alt="Tokyo metro platform" className="col-span-3 row-span-2 h-full w-full object-cover" />
+          {leftMediaVideoSrc ? (
+            <video
+              className="col-span-3 row-span-2 h-full w-full object-cover"
+              src={leftMediaVideoSrc}
+              muted
+              loop
+              playsInline
+              autoPlay
+            />
+          ) : (
+            <img
+              src={japanDay01Group}
+              alt="Tokyo metro platform"
+              className="col-span-3 row-span-2 h-full w-full object-cover"
+            />
+          )}
           <img src={japanDay03Group} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
           <img src={japanTokyo} alt="Traveler in Tokyo at night" className="col-span-4 h-full w-full object-cover" />
           <img src={japanDay06Nara} alt="Travelers in Japanese street" className="col-span-3 h-full w-full object-cover" />
