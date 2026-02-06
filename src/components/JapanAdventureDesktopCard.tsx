@@ -75,7 +75,7 @@ export default function JapanAdventureDesktopCard() {
         </div>
       </div>
 
-      <div className="mx-auto w-full overflow-hidden rounded-[26px] lg:w-[92%] xl:w-[90%]">
+      <div className="mx-auto w-full overflow-hidden rounded-[26px] md:w-[94%] lg:w-[92%] xl:w-[90%]">
         <div className="grid h-[580px] grid-cols-12 grid-rows-2 gap-1 bg-white xl:h-[620px]">
           <img src={japanDay01Group} alt="Tokyo metro platform" className="col-span-3 row-span-2 h-full w-full object-cover" />
           <img src={japanDay03Group} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
