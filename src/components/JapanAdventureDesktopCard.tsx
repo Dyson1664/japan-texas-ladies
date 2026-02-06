@@ -1,11 +1,4 @@
-import {
-  CalendarDays,
-  MapPin,
-  Rocket,
-  Handshake,
-  BadgeHelp,
-  User,
-} from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 
 import japanDay01Group from "@/assets/japan-day01-groupbb.jpg";
 import japanDay03Group from "@/assets/japan-day03-group.jpg";
@@ -14,18 +7,16 @@ import japanDay06Nara from "@/assets/japan-day06-main-nara-deer-park.jpg";
 import japanTea from "@/assets/japan-tea2.jpg";
 import japanTorii from "@/assets/japan-torii.jpg";
 
-import type { ComponentType, SVGProps } from "react";
-
 type Tag = {
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  emoji: string;
   label: string;
 };
 
 const tags: Tag[] = [
-  { icon: Rocket, label: "Adventure" },
-  { icon: Handshake, label: "Culture" },
-  { icon: BadgeHelp, label: "Under 2 Weeks" },
-  { icon: User, label: "Solo" },
+  { emoji: "🚀", label: "Adventure" },
+  { emoji: "🪭", label: "Culture" },
+  { emoji: "⏳", label: "Under 2 Weeks" },
+  { emoji: "🧳", label: "Solo" },
 ];
 
 const details = [
@@ -44,12 +35,12 @@ export default function JapanAdventureDesktopCard() {
             </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {tags.map(({ icon: Icon, label }) => (
+            {tags.map(({ emoji, label }) => (
               <span
                 key={label}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-3 py-1.5 text-sm lg:text-[15px] font-semibold text-teal-900 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
               >
-                <Icon className="h-4 w-4 lg:h-5 lg:w-5 text-teal-700" />
+                <span className="text-lg">{emoji}</span>
                 {label}
               </span>
             ))}
