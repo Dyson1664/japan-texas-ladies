@@ -7,6 +7,9 @@ import japanDay06Nara from "@/assets/japan-day06-main-nara-deer-park.jpg";
 import japanTea from "@/assets/japan-tea2.jpg";
 import japanTorii from "@/assets/japan-torii.jpg";
 
+// 🎥 NEW: import reel
+import tokyoReel from "@/assets/tokyo.mp4";
+
 type Tag = {
   emoji: string;
   label: string;
@@ -28,7 +31,12 @@ type JapanAdventureDesktopCardProps = {
   leftMediaVideoSrc?: string;
 };
 
-export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAdventureDesktopCardProps) {
+export default function JapanAdventureDesktopCard({
+  leftMediaVideoSrc,
+}: JapanAdventureDesktopCardProps) {
+  // 🎯 Default to Tokyo reel if no prop is passed
+  const videoSrc = leftMediaVideoSrc ?? tokyoReel;
+
   return (
     <section className="w-full px-5 py-5">
       <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
@@ -51,14 +59,10 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
             </div>
 
             <div className="mt-2 flex items-center gap-4 text-lg font-semibold text-slate-800 lg:text-xl">
-              {details.map(({ icon: Icon, label, underlined }) => (
+              {details.map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2">
                   <Icon className="h-4 w-4 text-[#0fc2bf] lg:h-5 lg:w-5" />
-                  <span
-                    className="font-playfair"
-                  >
-                    {label}
-                  </span>
+                  <span className="font-playfair">{label}</span>
                 </div>
               ))}
             </div>
@@ -66,41 +70,59 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
 
           <div className="min-w-[240px] pt-1 text-right">
             <p className="text-lg text-slate-700">
-              From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">€1,999</span> EUR
+              From{" "}
+              <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">
+                €1,999
+              </span>{" "}
+              EUR
             </p>
-          <button
-            type="button"
-            className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
-          >
-            Reserve Now
-          </button>
+            <button
+              type="button"
+              className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
+            >
+              Reserve Now
+            </button>
           </div>
         </div>
       </div>
 
       <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
         <div className="grid h-[460px] grid-cols-12 grid-rows-2 gap-1 bg-white lg:h-[500px] xl:h-[530px]">
-          {leftMediaVideoSrc ? (
-            <video
-              className="col-span-3 row-span-2 h-full w-full object-cover"
-              src={leftMediaVideoSrc}
-              muted
-              loop
-              playsInline
-              autoPlay
-            />
-          ) : (
-            <img
-              src={japanDay01Group}
-              alt="Tokyo metro platform"
-              className="col-span-3 row-span-2 h-full w-full object-cover"
-            />
-          )}
-          <img src={japanDay03Group} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
-          <img src={japanTokyo} alt="Traveler in Tokyo at night" className="col-span-4 h-full w-full object-cover" />
-          <img src={japanDay06Nara} alt="Travelers in Japanese street" className="col-span-3 h-full w-full object-cover" />
-          <img src={japanTea} alt="Tea ceremony class" className="col-span-3 h-full w-full object-cover" />
-          <img src={japanTorii} alt="Orange Torii gates in Kyoto" className="col-span-3 h-full w-full object-cover" />
+          {/* 🎥 LEFT REEL */}
+          <video
+            className="col-span-3 row-span-2 h-full w-full object-cover"
+            src={videoSrc}
+            muted
+            loop
+            playsInline
+            autoPlay
+          />
+
+          <img
+            src={japanDay03Group}
+            alt="Group by a river in Japan"
+            className="col-span-5 h-full w-full object-cover"
+          />
+          <img
+            src={japanTokyo}
+            alt="Traveler in Tokyo at night"
+            className="col-span-4 h-full w-full object-cover"
+          />
+          <img
+            src={japanDay06Nara}
+            alt="Travelers in Japanese street"
+            className="col-span-3 h-full w-full object-cover"
+          />
+          <img
+            src={japanTea}
+            alt="Tea ceremony class"
+            className="col-span-3 h-full w-full object-cover"
+          />
+          <img
+            src={japanTorii}
+            alt="Orange Torii gates in Kyoto"
+            className="col-span-3 h-full w-full object-cover"
+          />
         </div>
       </div>
 
