@@ -35,10 +35,13 @@ const details = [
 
 export default function JapanAdventureDesktopCard() {
   return (
-    <section className="mx-auto w-full max-w-[1420px] px-5 py-5 lg:px-7">
-      <div className="mb-4 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-extrabold lg:text-5xl leading-none tracking-tight text-slate-900">Japan Adventure</h1>
+    <section className="w-full px-5 py-5">
+      <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold lg:text-5xl leading-none tracking-tight text-slate-900">
+              Japan Adventure
+            </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {tags.map(({ icon: Icon, label }) => (
@@ -62,16 +65,17 @@ export default function JapanAdventureDesktopCard() {
           </div>
         </div>
 
-        <div className="min-w-[280px] pt-1 text-right">
-          <p className="text-xl text-slate-700">
-            From <span className="text-4xl font-extrabold lg:text-5xl text-slate-900">€1,999</span> EUR
-          </p>
-          <button
-            type="button"
-            className="mt-3 rounded-full bg-[#FFA171] px-7 py-3 text-lg font-bold text-slate-900 transition hover:brightness-95"
-          >
-            Check available start dates
-          </button>
+          <div className="min-w-[280px] pt-1 text-right">
+            <p className="text-xl text-slate-700">
+              From <span className="text-4xl font-extrabold lg:text-5xl text-slate-900">€1,999</span> EUR
+            </p>
+            <button
+              type="button"
+              className="mt-3 rounded-full bg-[#FFA171] px-7 py-3 text-lg font-bold text-slate-900 transition hover:brightness-95"
+            >
+              Check available start dates
+            </button>
+          </div>
         </div>
       </div>
 
