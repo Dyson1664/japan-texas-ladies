@@ -9,7 +9,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import FAQs from "./pages/FAQs";
 import TermsConditions from "./pages/TermsConditions";
-
+import JapanAdventureCardPreview from "./pages/JapanAdventureCardPreview";
 
 import { ItineraryTemplate } from "@/components/ItineraryTemplate";
 import { baliData } from "@/data/countries/bali";
@@ -28,14 +28,15 @@ const App = () => (
       <Sonner />
       <AppRouter>
         <Routes>
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/faqs" element={<FAQs />} />
-        <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/terms" element={<TermsConditions />} />
 
           <Route path="/" element={<BaliItineraryInline />} />
           <Route path="/bali-itinerary" element={<BaliItineraryInline />} />
           <Route path="/booking/:slug" element={<BookingPage />} />
+          <Route path="/japan-adventure-preview" element={<JapanAdventureCardPreview />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppRouter>
