@@ -51,9 +51,7 @@ export default function JapanAdventureDesktopCard() {
                 <div key={label} className="flex items-center gap-2">
                   <Icon className="h-4 w-4 text-[#0fc2bf] lg:h-5 lg:w-5" />
                   <span
-                    className={`font-playfair ${
-                      underlined ? "underline decoration-2 underline-offset-4" : ""
-                    }`}
+                    className="font-playfair"
                   >
                     {label}
                   </span>
