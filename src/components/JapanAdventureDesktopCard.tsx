@@ -64,7 +64,7 @@ export default function JapanAdventureDesktopCard() {
 
         <div className="min-w-[300px] pt-1 text-right">
           <p className="text-2xl text-slate-700">
-            From <span className="text-5xl font-extrabold lg:text-6xl text-slate-900">€2,549</span> EUR
+            From <span className="text-5xl font-extrabold lg:text-6xl text-slate-900">€1,999</span> EUR
           </p>
           <button
             type="button"
