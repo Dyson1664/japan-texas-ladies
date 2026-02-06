@@ -30,7 +30,7 @@ export default function JapanAdventureDesktopCard() {
       <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
         <div className="mb-3 flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-playfair font-semibold leading-none tracking-tight text-[#10b4b3] lg:text-4xl">
+            <h1 className="text-3xl font-playfair font-semibold leading-none tracking-tight text-[#0fc2bf] lg:text-4xl">
               Japan Adventure
             </h1>
 
@@ -62,7 +62,7 @@ export default function JapanAdventureDesktopCard() {
             </p>
             <button
               type="button"
-              className="mt-2 rounded-full bg-[#FFA171] px-6 py-2.5 text-base font-bold text-slate-900 transition hover:brightness-95"
+              className="mt-2 rounded-full bg-[#0fc2bf] px-6 py-2.5 text-base font-bold text-white transition hover:brightness-95"
             >
               Check available start dates
             </button>
