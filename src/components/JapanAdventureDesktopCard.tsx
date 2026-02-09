@@ -30,7 +30,7 @@ type JapanAdventureDesktopCardProps = {
 export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAdventureDesktopCardProps) {
   return (
     <section className="w-full px-5 py-5">
-      <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%] md:px-6 lg:px-12">
+      <div className="mx-auto w-full max-w-[1420px] md:w-[94%] lg:w-[92%] xl:w-[90%] md:px-6 lg:px-12">
         <div className="mb-3 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-playfair font-semibold leading-none tracking-tight text-[#0fc2bf] lg:text-4xl">
@@ -79,7 +79,7 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
         </div>
       </div>
 
-      <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
+      <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[94%] lg:w-[92%] xl:w-[90%]">
         <div className="grid h-[460px] grid-cols-12 grid-rows-2 gap-1 bg-white lg:h-[500px] xl:h-[530px]">
           {leftMediaVideoSrc ? (
             <video
