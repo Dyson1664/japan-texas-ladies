@@ -1,27 +1,21 @@
 // Import images
-import japanHero from "@/assets/japan-hero.jpg";
 import japanHero2 from "@/assets/japan-hero2.jpg";
 import japanHero3 from "@/assets/japan-hero3.jpg";
 import japanGarden from "@/assets/japan-garden.jpg";
 import japanTokyo from "@/assets/japan-tokyo.jpg";
 import japanSushi from "@/assets/japan-sushi.jpg";
 import japanTorii from "@/assets/japan-torii.jpg";
-import japanmtfuji from "@/assets/japan-mt-fuji.jpg";
-import review1 from "@/assets/review-1.png";
-import review2 from "@/assets/review-2.png";
+import japanMtFuji from "@/assets/japan-mt-fuji.jpg";
 
 // import japanDay01 from "@/assets/japan-day01-main-shibuya-crossing.jpg"; // Tokyo arrival + Shibuya
 import japanDay01 from "@/assets/japan-day01-groupbb.jpg"; // Asakusa Sensō-ji / Kaminarimon
 
-import japanDay02 from "@/assets/japan-day02-main-sensoji.jpg"; // Asakusa Sensō-ji / Kaminarimon
 import japanDay03 from "@/assets/japan-day03-group.jpg"; // Meiji Shrine + Harajuku/Golden Gai
 import japanDay04 from "@/assets/japan-day04-main-hakone-mt-fuji.jpg"; // Hakone Loop / Mt. Fuji views
-import japanDay05 from "@/assets/japan-day05-main-fushimi-inari.jpg"; // Fushimi Inari torii gates
 
 import japantea from "@/assets/japan-tea2.jpg";
 import japansword from "@/assets/japan-sword2.jpg";
 
-import japanDay06 from "@/assets/japan-day06-main-nara-deer-park.jpg"; // Nara Deer Park + samurai class
 import japanDay07 from "@/assets/japan-last-day.jpg"; // Kyoto checkout / farewell
 
 import tile01 from "@/assets/japan-tile01.jpg";
@@ -29,24 +23,8 @@ import tile02 from "@/assets/japan-tile02.jpg";
 import tile03 from "@/assets/japan-tile03.jpg";
 import tile04 from "@/assets/japan-tile04.jpg";
 
-import tokyoReel from "@/assets/japan/tokyo.mp4";
-import kyotoReel from "@/assets/japan/kyoto.mp4";
-import mtfujiReel from "@/assets/japan/mt-fuji.mp4";
-
-import tokyocover from "@/assets/japan/tokyo-cover.jpeg";
-import kyotocover from "@/assets/japan/kyoto-cover.jpeg";
-import mtfujicover from "@/assets/japan/mt-fuji-cover.jpeg";
-
-// hotels
-import tokyohotel from "@/assets/tokyo-hotel.jpg";
-import tokyohotel2 from "@/assets/tokyo-hotel-2.jpg";
-import tokyohotel3 from "@/assets/tokyo-hotel-3.jpg";
-import tokyohotel4 from "@/assets/tokyo-hotel-4.jpg";
-
-import kyotohotel from "@/assets/kyoto-hotel.webp";
-import kyotohotel2 from "@/assets/kyoto-hotel-2.jpg";
-import kyotohotel3 from "@/assets/kyoto-hotel-3.jpg";
-import kyotohotel4 from "@/assets/kyoto-hotel-4.jpg";
+// hotels (using available local assets)
+import japanHero from "@/assets/japan-hero.jpg";
 
 // Import icons for highlights
 import { Home, Zap, Plane, Users, Soup, TreePine } from "lucide-react";
@@ -84,24 +62,21 @@ export const japanData = {
       /*description:
         "Glide by ropeway over Owakudani, sail Lake Ashi on the pirate ship, and (weather permitting) catch iconic views of Mt. Fuji.",
       */
-      image: tokyocover,
-      video: tokyoReel, // Hakone / Mt. Fuji day
+      image: japanTokyo,
     },
     {
       title: "Kyoto",
       /*description:
         "Walk the vermilion torii tunnels of Kyoto’s most photographed shrine—serene at sunrise and pure Kyoto magic.",
       */
-      image: kyotocover,
-      video: kyotoReel, // Fushimi Inari day
+      image: japanTorii,
     },
     {
       title: "Mt. Fuji & Hakone Loop",
       /*description:
         "Glide by ropeway over Owakudani, sail Lake Ashi on the pirate ship, and (weather permitting) catch iconic views of Mt. Fuji.",
       */
-      image: mtfujicover,
-      video: mtfujiReel, // Hakone / Mt. Fuji day
+      image: japanMtFuji,
     },
   ],
 
@@ -147,12 +122,12 @@ export const japanData = {
       title: "THE KNOT TOKYO Shinjuku",
       description:
         "Stylish contemporary hotel with its own bakery in the heart of Tokyo's entertainment district with easy metro access.",
-      images: [tokyohotel, tokyohotel2, tokyohotel3, tokyohotel4],
+      images: [japanHero, japanHero2, japanHero3, japanGarden],
     },
     {
       title: "Prince Smart Inn Shijo Omiya",
       description: "Modern Kyoto hotel perfectly positioned for exploring ancient temples and traditional districts.",
-      images: [kyotohotel2, kyotohotel, kyotohotel3, kyotohotel4],
+      images: [japanTorii, japanSushi, japanTokyo, japanMtFuji],
     },
   ],
 
