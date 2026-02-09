@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 import japanDay01Group from "@/assets/japan-day01-groupbb.jpg";
 import japanDay03Group from "@/assets/japan-day03-group.jpg";
@@ -18,10 +18,7 @@ const tags: Tag[] = [
   { emoji: "🧳", label: "Solo" },
 ];
 
-const details = [
-  { icon: CalendarDays, label: "8 days" },
-  { icon: MapPin, label: "Tokyo - Kyoto", underlined: true },
-];
+const details = [{ icon: MapPin, label: "Tokyo - Mt Fuji - Kyoto", underlined: true }];
 
 type JapanAdventureDesktopCardProps = {
   leftMediaVideoSrc?: string;
@@ -33,7 +30,7 @@ type JapanAdventureDesktopCardProps = {
 export default function JapanAdventureDesktopCard({
   leftMediaVideoSrc,
   title = "Best of Japan",
-  priceLabel = "€1,999 EUR",
+  priceLabel = "USD $2,495",
   ctaLabel = "Reserve Now",
 }: JapanAdventureDesktopCardProps) {
   return (

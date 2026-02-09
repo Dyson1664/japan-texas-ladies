@@ -38,7 +38,7 @@ const japanOverview = {
   location: "Japan",
   duration: "8 days",
   heroImage: japanHero3,
-  price: "€1,999 EUR",
+  price: "USD $2,495",
   ctaLabel: "Reserve Now",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [

@@ -32,7 +32,7 @@ export const destinationsData: Record<string, DestinationData> = {
         duration: "10 days",
         description: "Discover the perfect harmony of ancient traditions and cutting-edge modernity",
         image: japanHeroImage,
-        price: "From $1,899",
+        price: "From $2,495",
         route: "/japan-itinerary"
       }
     ],
