@@ -157,11 +157,11 @@ export const japanData = {
     },
     {
       day: 3,
-      title: "Tokyo | Shrines, Fashion & Nightlife",
+      title: "Explore Tokyo",
       location: "Tokyo, Japan",
       heroImage: japanDay03,
       description:
-        "Start at Meiji-jingū Shrine for a calm morning before diving into Harajuku’s Takeshita-dōri. Spend the afternoon exploring Omotesandō and nearby cafés, then wrap up with dinner and a night out in Shinjuku’s Golden Gai.",
+        "Begin with a peaceful visit to Meiji-jingū Shrine, then dive into the color and energy of Harajuku’s Takeshita-dōri. Enjoy a free afternoon to explore cafés, vintage shops, or Omotesandō, before dinner and a night out in Shinjuku’s legendary Golden Gai.",
       accommodation: { name: "The Knot Tokyo Shinjuku" },
       highlights: "Meiji-jingū Shrine, Harajuku, Omotesandō, Golden Gai nightlife",
     },
