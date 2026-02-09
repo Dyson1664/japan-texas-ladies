@@ -4,12 +4,15 @@ import { japanData } from "@/data/countries/japan";
 
 const JapanItinerary = () => {
   return (
-    <>
-      <div className="hidden md:block">
-        <JapanAdventureDesktopCard />
-      </div>
-      <ItineraryTemplate data={japanData} />
-    </>
+    <ItineraryTemplate
+      data={japanData}
+      hideDesktopHero
+      desktopHero={
+        <div className="hidden md:block">
+          <JapanAdventureDesktopCard />
+        </div>
+      }
+    />
   );
 };
 
