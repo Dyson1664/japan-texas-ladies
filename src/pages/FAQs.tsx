@@ -26,11 +26,6 @@ const FAQ_ITEMS = [
       "Yes—most guests join solo. Group travel makes it easy to connect from day one, whether it’s your first time traveling alone or your tenth. Expect a friendly, welcoming vibe from the start.",
   },
   {
-    question: "What is the average age?",
-    answer:
-      "Our trips are especially popular with travelers in their 20s and 30s. We keep things fun, social, and laid-back—more like exploring with friends than a school trip.",
-  },
-  {
     question: "Why choose Imagine Beyond Travel?",
     answer:
       "We craft small-group adventures designed for curious, social travelers. Think thoughtful itineraries, unique experiences, seamless logistics, and the right balance of culture, adventure, and downtime—so you can focus on having an amazing time.",
@@ -60,11 +55,6 @@ const FAQ_ITEMS = [
   question: "Do I need to arrive at a specific time?",
   answer:
     "We suggest arriving by early afternoon so you can settle in before the welcome meeting. If you’re landing earlier or later, no problem—just give us a heads-up. Hotel check-in is typically from 2 PM.",
-},
-{
-  question: "How does airport pickup work?",
-  answer:
-    "If your trip includes an airport transfer, a driver will meet you in arrivals holding a sign with your name and take you directly to the first-night hotel—simple and stress-free.",
 },
 {
   question: "I’m not into partying—will I still enjoy the trip?",

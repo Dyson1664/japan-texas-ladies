@@ -121,6 +121,8 @@ interface ItineraryTemplateProps {
   data: CountryData;
   logoStyle?: React.CSSProperties;
   FooterComponent?: React.ComponentType;
+  desktopHero?: React.ReactNode;
+  hideDesktopHero?: boolean;
 }
 
 // Review Section Component
@@ -1229,7 +1231,7 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
 
 
 export const ItineraryTemplate = memo(
-  ({ data, logoStyle, FooterComponent }: ItineraryTemplateProps) => {
+  ({ data, logoStyle, FooterComponent, desktopHero, hideDesktopHero }: ItineraryTemplateProps) => {
     // Memoize derived values
     const countryName = useMemo(() => {
       // Special case for Sri Lanka to keep both words
@@ -1358,9 +1360,14 @@ export const ItineraryTemplate = memo(
     return (
       <div className={STATIC_STYLES.gradient}>
         <Navbar logoStyle={logoStyle} />
+        {desktopHero}
 
         {/* Hero Section (custom) */}
-        <section className="relative h-[70vh] md:h-[70vh] flex overflow-hidden md:mx-6 lg:mx-12 xl:mx-16 rounded-none md:rounded-2xl mt-0 md:mt-6 bg-transparent md:bg-white p-0 md:p-6 shadow-none md:shadow-sm">
+        <section
+          className={`relative h-[70vh] md:h-[70vh] flex overflow-hidden md:mx-6 lg:mx-12 xl:mx-16 rounded-none md:rounded-2xl mt-0 md:mt-6 bg-transparent md:bg-white p-0 md:p-6 shadow-none md:shadow-sm ${
+            hideDesktopHero ? "md:hidden" : ""
+          }`}
+        >
           {/* Mobile: Show only main image */}
           <div className="md:hidden relative w-full h-full">
             <div
