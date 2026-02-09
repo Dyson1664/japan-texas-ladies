@@ -12,7 +12,11 @@ type Tag = {
   label: string;
 };
 
-const tags: Tag[] = [];
+const tags: Tag[] = [
+  { emoji: "🚀", label: "Adventure" },
+  { emoji: "🪭", label: "Culture" },
+  { emoji: "🧳", label: "Solo" },
+];
 
 const details = [
   { icon: CalendarDays, label: "8 days" },

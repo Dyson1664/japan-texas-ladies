@@ -33,11 +33,7 @@ const japanOverview = {
   id: "japan-journey",
   slug: "japan",
   title: "Japan Golden Route",
-  tags: [
-    { emoji: "🚀", label: "Adventure" },
-    { emoji: "🪭", label: "Culture" },
-    { emoji: "🧳", label: "Solo" },
-  ],
+  tags: [],
   subtitle: "Discover the perfect harmony of ancient traditions and cutting-edge modernity",
   location: "Japan",
   duration: "7 days",
