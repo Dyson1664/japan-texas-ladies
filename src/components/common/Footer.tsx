@@ -37,14 +37,6 @@ const Footer = () => {
               </a>
 
               <Link
-                to="/contact"
-                className="block hover:text-primary transition-colors"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Contact Us
-              </Link>
-
-              <Link
                 to="/about"
                 className="block hover:text-primary transition-colors"
                 onClick={() => window.scrollTo(0, 0)}
