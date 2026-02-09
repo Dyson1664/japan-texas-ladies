@@ -12,12 +12,7 @@ type Tag = {
   label: string;
 };
 
-const tags: Tag[] = [
-  { emoji: "🚀", label: "Adventure" },
-  { emoji: "🪭", label: "Culture" },
-  { emoji: "⏳", label: "Under 2 Weeks" },
-  { emoji: "🧳", label: "Solo" },
-];
+const tags: Tag[] = [];
 
 const details = [
   { icon: CalendarDays, label: "8 days" },
@@ -31,24 +26,26 @@ type JapanAdventureDesktopCardProps = {
 export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAdventureDesktopCardProps) {
   return (
     <section className="w-full px-5 py-5">
-      <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%]">
+      <div className="mx-auto w-full max-w-[1420px] md:w-[92%] lg:w-[88%] xl:w-[86%] md:px-6 lg:px-12">
         <div className="mb-3 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-playfair font-semibold leading-none tracking-tight text-[#0fc2bf] lg:text-4xl">
               Japan Adventure
             </h1>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              {tags.map(({ emoji, label }) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary lg:text-sm"
-                >
-                  <span className="text-base">{emoji}</span>
-                  {label}
-                </span>
-              ))}
-            </div>
+            {tags.length > 0 && (
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {tags.map(({ emoji, label }) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary lg:text-sm"
+                  >
+                    <span className="text-base">{emoji}</span>
+                    {label}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="mt-2 flex items-center gap-4 text-lg font-semibold text-slate-800 lg:text-xl">
               {details.map(({ icon: Icon, label, underlined }) => (
@@ -68,12 +65,12 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
             <p className="text-lg text-slate-700">
               From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">€1,999</span> EUR
             </p>
-          <button
-            type="button"
-            className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
-          >
-            Reserve Now
-          </button>
+            <button
+              type="button"
+              className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
+            >
+              Reserve Now
+            </button>
           </div>
         </div>
       </div>
