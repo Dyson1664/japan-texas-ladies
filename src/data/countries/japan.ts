@@ -38,7 +38,8 @@ const japanOverview = {
   location: "Japan",
   duration: "8 days",
   heroImage: japanHero3,
-  price: "USD $1,959",
+  price: "€1,999 EUR",
+  ctaLabel: "Reserve Now",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [
     "Discover the very best of Japan on this unforgettable 7-day journey. From Tokyo’s electric energy ancient temples, vibrant street-food alleys, cutting-edge fashion, and legendary nightlife to the timeless beauty of Kyoto’s shrines, tea ceremonies, and traditional streets, this trip captures Japan at its finest.",

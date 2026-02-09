@@ -25,9 +25,15 @@ const details = [
 
 type JapanAdventureDesktopCardProps = {
   leftMediaVideoSrc?: string;
+  priceLabel?: string;
+  ctaLabel?: string;
 };
 
-export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAdventureDesktopCardProps) {
+export default function JapanAdventureDesktopCard({
+  leftMediaVideoSrc,
+  priceLabel = "€1,999 EUR",
+  ctaLabel = "Reserve Now",
+}: JapanAdventureDesktopCardProps) {
   return (
     <section className="w-full px-5 py-5">
       <div className="mx-auto w-full max-w-[1420px] md:w-[94%] lg:w-[92%] xl:w-[90%] md:px-6 lg:px-12">
@@ -67,13 +73,13 @@ export default function JapanAdventureDesktopCard({ leftMediaVideoSrc }: JapanAd
 
           <div className="min-w-[240px] pt-1 text-right">
             <p className="text-lg text-slate-700">
-              From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">€1,999</span> EUR
+              From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">{priceLabel}</span>
             </p>
             <button
               type="button"
               className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
             >
-              Reserve Now
+              {ctaLabel}
             </button>
           </div>
         </div>
