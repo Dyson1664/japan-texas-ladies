@@ -45,6 +45,14 @@ const Footer = () => {
               </Link>
 
               <Link
+                to="/about"
+                className="block hover:text-primary transition-colors"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                About Imagine Beyond Travel
+              </Link>
+
+              <Link
                 to="/faqs"
                 className="block hover:text-primary transition-colors"
                 onClick={() => window.scrollTo(0, 0)}

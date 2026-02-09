@@ -42,13 +42,7 @@ const Navbar = memo(({ logoStyle }: NavbarProps = {}) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 ml-auto mr-12">
-            <Link to="/about">
-              <Button variant="ghost" className="text-foreground hover:text-primary">
-                About Us
-              </Button>
-            </Link>
-          </div>
+          <div className="hidden md:flex items-center space-x-8 ml-auto mr-12" />
 
           {/* Mobile menu button */}
           <div className="md:hidden ml-auto">
@@ -66,16 +60,7 @@ const Navbar = memo(({ logoStyle }: NavbarProps = {}) => {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 bg-background">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-foreground hover:text-primary"
-                >
-                  About Us
-                </Button>
-              </Link>
-            </div>
+            <div className="px-2 pt-2 pb-3 space-y-1" />
           </div>
         )}
       </div>
