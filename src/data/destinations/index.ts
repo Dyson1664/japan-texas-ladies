@@ -28,7 +28,7 @@ export const destinationsData: Record<string, DestinationData> = {
       {
         id: "japan-journey",
         slug: "japan",
-        title: "Japan Golden Route",
+        title: "Best of Japan",
         duration: "10 days",
         description: "Discover the perfect harmony of ancient traditions and cutting-edge modernity",
         image: japanHeroImage,

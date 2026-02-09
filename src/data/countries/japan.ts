@@ -32,7 +32,7 @@ import { Home, Zap, Plane, Users, Soup, TreePine } from "lucide-react";
 const japanOverview = {
   id: "japan-journey",
   slug: "japan",
-  title: "Japan Golden Route",
+  title: "Best of Japan",
   tags: [],
   subtitle: "Discover the perfect harmony of ancient traditions and cutting-edge modernity",
   location: "Japan",

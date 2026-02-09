@@ -57,7 +57,7 @@ export const FEATURED_TOURS: readonly FeaturedTour[] = [
   {
     id: 1,
     slug: "japan",
-    title: "Japan Golden Route",
+    title: "Best of Japan",
     location: "Tokyo, Japan",
     duration: "7 days",
     rating: 4.9,

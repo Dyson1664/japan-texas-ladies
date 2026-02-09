@@ -25,12 +25,14 @@ const details = [
 
 type JapanAdventureDesktopCardProps = {
   leftMediaVideoSrc?: string;
+  title?: string;
   priceLabel?: string;
   ctaLabel?: string;
 };
 
 export default function JapanAdventureDesktopCard({
   leftMediaVideoSrc,
+  title = "Best of Japan",
   priceLabel = "€1,999 EUR",
   ctaLabel = "Reserve Now",
 }: JapanAdventureDesktopCardProps) {
@@ -40,7 +42,7 @@ export default function JapanAdventureDesktopCard({
         <div className="mb-3 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-playfair font-semibold leading-none tracking-tight text-[#0fc2bf] lg:text-4xl">
-              Japan Adventure
+              {title}
             </h1>
 
             {tags.length > 0 && (

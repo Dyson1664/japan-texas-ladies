@@ -6,7 +6,11 @@ export default function JapanAdventureCardPreview() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <JapanAdventureDesktopCard priceLabel={japanData.price} ctaLabel={japanData.ctaLabel} />
+      <JapanAdventureDesktopCard
+        title={japanData.title}
+        priceLabel={japanData.price}
+        ctaLabel={japanData.ctaLabel}
+      />
     </div>
   );
 }

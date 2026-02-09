@@ -9,7 +9,11 @@ const JapanItinerary = () => {
       hideDesktopHero
       desktopHero={
         <div className="hidden md:block">
-          <JapanAdventureDesktopCard priceLabel={japanData.price} ctaLabel={japanData.ctaLabel} />
+          <JapanAdventureDesktopCard
+            title={japanData.title}
+            priceLabel={japanData.price}
+            ctaLabel={japanData.ctaLabel}
+          />
         </div>
       }
     />
