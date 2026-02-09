@@ -13,7 +13,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { memo, useMemo, useCallback, useState, useRef, useEffect } from "react";
-import { STATIC_STYLES, STATIC_TEXT, SUMMARY_LABELS } from "@/data/itinerary-static";
+import { STATIC_STYLES, STATIC_TEXT } from "@/data/itinerary-static";
 import Footer from "@/components/common/Footer";
 import { DayItinerary } from "@/data/types";
 import ResponsiveRoute from "@/components/RouteBar"; // <-- route component
@@ -994,30 +994,6 @@ const AboutSection = memo(({ data }: { data: CountryData }) => {
   );
 });
 
-const SummarySection = memo(({ summary }: { summary: CountryData["summary"] }) => (
-  <div className={STATIC_STYLES.summaryCard}>
-    <h3 className="text-lg font-semibold text-foreground mb-3">{STATIC_TEXT.summaryTitle}</h3>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-      <div>
-        <span className="text-muted-foreground">{SUMMARY_LABELS.duration}</span>
-        <p className="font-medium">{summary.duration}</p>
-      </div>
-      <div>
-        <span className="text-muted-foreground">{SUMMARY_LABELS.activities}</span>
-        <p className="font-medium">{summary.activities}</p>
-      </div>
-      <div>
-        <span className="text-muted-foreground">{SUMMARY_LABELS.areas}</span>
-        <p className="font-medium">{summary.areas}</p>
-      </div>
-      <div>
-        <span className="text-muted-foreground">{SUMMARY_LABELS.type}</span>
-        <p className="font-medium">{summary.type}</p>
-      </div>
-    </div>
-  </div>
-));
-
 const IncludedSection = memo(
   ({ included, countryName }: { included: CountryData["included"]; countryName: string }) => (
     <div
@@ -1540,9 +1516,6 @@ export const ItineraryTemplate = memo(
 
               {/* Where We Stay Section */}
               <WhereWeStay data={data} />
-
-              {/* Trip Summary */}
-              <SummarySection summary={data.summary} />
 
               {/* What's Included Section */}
               <IncludedSection included={data.included} countryName={countryName} />
