@@ -5,7 +5,20 @@ import japanDay03Group from "@/assets/japan-day03-group.jpg";
 import japanTokyo from "@/assets/japan-tokyo.jpg";
 import japanDay06Nara from "@/assets/japan-day06-main-nara-deer-park.jpg";
 import japanTea from "@/assets/japan-tea2.jpg";
-import japanTorii from "@/assets/japan-torii.jpg";
+import texasday from "@/assets/texasday.jpg";
+import japanHero from "@/assets/japan-hero.jpg";
+
+import texas1 from "@/assets/texas1.jpeg";
+import texas2 from "@/assets/texas2.jpeg";
+import texas3 from "@/assets/texas3.jpeg";
+import texas4 from "@/assets/texas4.jpeg";
+import texas5 from "@/assets/texas5.jpeg";
+import texas6 from "@/assets/texas6.jpeg";
+
+import texasreel1 from "@/assets/tokyo.mp4";
+
+import texasmario from "@/assets/mariokart.jpg";
+
 
 type Tag = {
   emoji: string;
@@ -97,27 +110,29 @@ export default function JapanAdventureDesktopCard({
 
       <div className="mx-auto w-full overflow-hidden rounded-[24px] md:w-[94%] lg:w-[92%] xl:w-[90%]">
         <div className="grid h-[460px] grid-cols-12 grid-rows-2 gap-1 bg-white lg:h-[500px] xl:h-[530px]">
-          {leftMediaVideoSrc ? (
-            <video
-              className="col-span-3 row-span-2 h-full w-full object-cover"
-              src={leftMediaVideoSrc}
-              muted
-              loop
-              playsInline
-              autoPlay
-            />
-          ) : (
-            <img
-              src={japanDay01Group}
-              alt="Tokyo metro platform"
-              className="col-span-3 row-span-2 h-full w-full object-cover"
-            />
-          )}
-          <img src={japanDay03Group} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
-          <img src={japanTokyo} alt="Traveler in Tokyo at night" className="col-span-4 h-full w-full object-cover" />
-          <img src={japanDay06Nara} alt="Travelers in Japanese street" className="col-span-3 h-full w-full object-cover" />
-          <img src={japanTea} alt="Tea ceremony class" className="col-span-3 h-full w-full object-cover" />
-          <img src={japanTorii} alt="Orange Torii gates in Kyoto" className="col-span-3 h-full w-full object-cover" />
+          {texasreel1 ? (
+  <video
+    className="col-span-3 row-span-2 h-full w-full object-cover"
+    src={texasreel1}
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="auto"
+  />
+) : (
+  <img
+    src={japanDay01Group}
+    alt="Tokyo metro platform"
+    className="col-span-3 row-span-2 h-full w-full object-cover"
+  />
+)}
+
+          <img src={texas2} alt="Group by a river in Japan" className="col-span-5 h-full w-full object-cover" />
+          <img src={japanHero} alt="Traveler in Tokyo at night" className="col-span-4 h-full w-full object-cover" />
+          <img src={texasmario} alt="Travelers in Japanese street" className="col-span-3 h-full w-full object-cover" />
+          <img src={texas3} alt="Tea ceremony class" className="col-span-3 h-full w-full object-cover" />
+          <img src={texas5} alt="Orange Torii gates in Kyoto" className="col-span-3 h-full w-full object-cover" />
         </div>
       </div>
 

@@ -1201,7 +1201,7 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
           )}
 
           <p className="text-xs text-center text-muted-foreground leading-relaxed">
-            Reserve for $300 - deducted from total fees. Non-refundable.
+            Reserve for $800 - deducted from total fees. Non-refundable.
           </p>
         </div>
       </div>
@@ -1324,10 +1324,11 @@ export const ItineraryTemplate = memo(
                   transportation={day.transportation}
                   meals={day.meals}
                   highlights={
-                    day.highlights ||
-                    day.activities?.map((activity) => activity.title).join(", ") ||
-                    "Explore and discover"
-                  }
+                  day.highlights ??
+                  (day.activities?.length
+                    ? day.activities.map((a) => a.title).join(", ")
+                    : undefined)
+                }
                 />
               </AccordionContent>
             </AccordionItem>
