@@ -1535,15 +1535,17 @@ export const ItineraryTemplate = memo(
         </div>
 
 {/* Mobile Sticky Booking Bar */}
-<div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-3 shadow-lg">
+<div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-2 shadow-lg">
   <div className="flex items-center justify-between gap-4">
-    <div className="flex flex-col">
+    <div className="flex flex-col leading-tight space-y-0.5">
       <span className="text-sm text-muted-foreground">From</span>
       <span className="text-2xl font-bold text-foreground">
         {data.price || "USD $1,399"}
       </span>
       {data.priceNote && (
-        <span className="text-xs text-muted-foreground">{data.priceNote}</span>
+        <span className="text-[11px] text-muted-foreground leading-tight">
+          {data.priceNote}
+        </span>
       )}
     </div>
 
@@ -1575,6 +1577,7 @@ export const ItineraryTemplate = memo(
     })()}
   </div>
 </div>
+
 
 
         {/* Footer */}
