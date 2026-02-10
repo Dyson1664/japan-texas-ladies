@@ -45,7 +45,7 @@ type JapanAdventureDesktopCardProps = {
 export default function JapanAdventureDesktopCard({
   leftMediaVideoSrc,
   title = "Best of Japan",
-  priceLabel = "USD $2,395",
+  priceLabel = "$2,395",
   ctaLabel = "Reserve Now",
   tripSlug = "japan",
   priceNote = "First 6 bookings, then USD $2,495",
