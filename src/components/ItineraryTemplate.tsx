@@ -1195,7 +1195,7 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
                 size="default"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold"
               >
-                RESERVE NOW $800
+                RESERVE NOW $650
               </Button>
             </a>
           )}
@@ -1570,7 +1570,7 @@ export const ItineraryTemplate = memo(
             size="default"
             className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-semibold px-6"
           >
-            RESERVE NOW $800
+            RESERVE NOW $650
           </Button>
         </a>
       );

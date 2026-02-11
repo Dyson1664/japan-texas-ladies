@@ -80,7 +80,7 @@ const japanOverview = {
   heroImage: texas5,
   price: "$2,395",
   priceNote: "First 6 bookings, then $2,495",
-  ctaLabel: "Reserve Now $800",
+  ctaLabel: "Reserve Now $650",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [
   "Discover Japan on a thoughtfully paced 8-day journey created for culture and ease. This Texas Ladies Get Outdoors & Travel experience takes you from the bright energy of Tokyo to the timeless beauty of Kyoto—blending iconic landmarks with meaningful moments.",
