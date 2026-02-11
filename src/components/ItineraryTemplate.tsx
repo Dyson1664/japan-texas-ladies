@@ -1201,7 +1201,7 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
           )}
 
           <p className="text-xs text-center text-muted-foreground leading-relaxed">
-            Reserve for $800 - deducted from total fees. Non-refundable.
+            Reserve for $650 - deducted from total fees. Non-refundable.
           </p>
         </div>
       </div>
