@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Users } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/common/Footer"; // <-- keep YOUR other project footer
+import Footer from "@/components/common/Footer";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,55 +28,44 @@ import { cn } from "@/lib/utils";
 /**
  * ✅ Toggle payments (set to true when you’re ready to enable Shopify)
  */
-const PAYMENTS_ENABLED = false;
+const PAYMENTS_ENABLED = true;
 
 /**
- * ✅ Config by slug: /booking/japan or /booking/colombia
+ * ✅ Option 1: Send user to Shopify product page (no variant IDs needed).
+ * Your Shopify product handle is the part after /products/
+ * Example: https://tbff.imaginebeyondtravel.com/products/japan-2027-deposit
+ * Handle = japan-2027-deposit
  */
 const BOOKING_CONFIG: Record<
   string,
   {
     countryName: string;
-    variantId: string;
+    productHandle: string;
     requiresPassport: boolean;
     shopifyDomain: string;
   }
 > = {
-  colombia: {
-    countryName: "Colombia",
-    variantId: "45199567650995",
-    requiresPassport: true,
-    shopifyDomain: "tbff.imaginebeyondtravel.com",
-  },
-
   japan: {
     countryName: "Japan",
-    variantId: "45208545362099",
-    requiresPassport: false,
-    shopifyDomain: "tbff.imaginebeyondtravel.com",
-  },
-
-  bali: {
-    countryName: "Bali",
-    variantId: "45218593964211",
+    productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different
     requiresPassport: false,
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
 };
 
-function buildShopifyCartUrl(params: {
+function buildShopifyProductUrl(params: {
   shopifyDomain: string;
-  variantId: string;
-  quantity?: number;
+  productHandle: string;
   attributes: Record<string, string>;
 }) {
-  const { shopifyDomain, variantId, quantity = 1, attributes } = params;
+  const { shopifyDomain, productHandle, attributes } = params;
 
-  const baseUrl = `https://${shopifyDomain}/cart/${variantId}:${quantity}`;
+  const baseUrl = `https://${shopifyDomain}/products/${productHandle}`;
 
+  // Optional: pass info through query string (useful later if you add a Shopify theme snippet)
   const qs = new URLSearchParams();
   Object.entries(attributes).forEach(([key, value]) => {
-    qs.append(`attributes[${key}]`, value);
+    qs.append(key, value);
   });
 
   return `${baseUrl}?${qs.toString()}`;
@@ -96,7 +85,7 @@ const baseSchema = z.object({
 });
 
 /**
- * ✅ Passport schema used only when requiresPassport=true
+ * ✅ Passport schema (not used for Japan currently, but kept so you can re-enable easily)
  */
 const passportSchema = z.object({
   passportFirstNameGivenName: z.string().trim().min(1).max(100),
@@ -205,6 +194,7 @@ export default function BookingPage() {
     window.scrollTo(0, 0);
   }, []);
 
+  // Only support Japan (remove other trips)
   const config = slug ? BOOKING_CONFIG[slug] : undefined;
 
   const schema = useMemo(() => {
@@ -256,12 +246,8 @@ export default function BookingPage() {
   }
 
   const onSubmit = (data: BookingFormData) => {
-    // Keep validation + submit behavior, but prevent payment redirect.
-    // You can later flip PAYMENTS_ENABLED=true to enable Shopify again.
     if (!PAYMENTS_ENABLED) {
       setIsSubmitting(false);
-      // Optional: you could show a toast here if you have one.
-      // For now, we just do nothing.
       return;
     }
 
@@ -286,14 +272,13 @@ export default function BookingPage() {
       attributes["Passport Expiry Date"] = data.passportExpiryDate || "";
     }
 
-    const checkoutUrl = buildShopifyCartUrl({
+    const productUrl = buildShopifyProductUrl({
       shopifyDomain: config.shopifyDomain,
-      variantId: config.variantId,
-      quantity: 1,
+      productHandle: config.productHandle,
       attributes,
     });
 
-    window.location.href = checkoutUrl;
+    window.location.href = productUrl;
   };
 
   const paymentDisabled = !PAYMENTS_ENABLED;
@@ -305,7 +290,7 @@ export default function BookingPage() {
       <main className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-lg mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
               Complete Your Booking – {config.countryName}
             </h1>
             <p className="text-muted-foreground">
@@ -316,6 +301,20 @@ export default function BookingPage() {
           <div className="bg-card rounded-xl border border-border p-6 sm:p-8 shadow-sm">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex gap-3 items-start">
+                  <div className="bg-primary/20 rounded-full p-2 mt-0.5">
+                    <Users className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">
+                      Booking for more than one person?
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                      Please complete only the lead traveler’s details during checkout. We’ll follow up with you for the remaining traveler details.
+                    </p>
+                  </div>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="fullName"
@@ -521,7 +520,7 @@ export default function BookingPage() {
                   </p>
                 ) : (
                   <p className="text-xs text-muted-foreground text-center pt-2">
-                    You will be redirected to Shopify checkout.
+                    You will be redirected to Shopify to choose your pricing tier and checkout.
                   </p>
                 )}
               </form>
