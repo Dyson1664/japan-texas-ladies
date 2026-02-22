@@ -13,6 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Form,
   FormControl,
   FormField,
@@ -41,6 +48,8 @@ const BOOKING_CONFIG: Record<
   {
     countryName: string;
     productHandle: string;
+    variantId?: string;
+    fallbackVariantId?: string;
     requiresPassport: boolean;
     shopifyDomain: string;
   }
@@ -48,6 +57,8 @@ const BOOKING_CONFIG: Record<
   japan: {
     countryName: "Japan",
     productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different
+    variantId: "45272110235827", // <-- REQUIRED to skip product page and go straight to checkout
+    fallbackVariantId: "45287018856627", // <-- Standard price variant (used if early bird sells out)
     requiresPassport: false,
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
@@ -71,6 +82,21 @@ function buildShopifyProductUrl(params: {
   return `${baseUrl}?${qs.toString()}`;
 }
 
+function buildShopifyCheckoutUrl(params: {
+  shopifyDomain: string;
+  variantId: string;
+  quantity: number;
+  attributes: Record<string, string>;
+}) {
+  const { shopifyDomain, variantId, quantity, attributes } = params;
+  const baseUrl = `https://${shopifyDomain}/cart/${variantId}:${quantity}`;
+  const qs = new URLSearchParams();
+  Object.entries(attributes).forEach(([key, value]) => {
+    qs.append(`attributes[${key}]`, value);
+  });
+  return `${baseUrl}?${qs.toString()}`;
+}
+
 /**
  * ✅ Base schema
  */
@@ -79,6 +105,8 @@ const baseSchema = z.object({
   email: z.string().trim().email("Please enter a valid email address").max(255),
   mobile: z.string().trim().min(1, "Mobile number is required").max(30),
   instagram: z.string().trim().max(50).optional().or(z.literal("")),
+  guestCount: z.coerce.number().int().min(1, "Minimum 1 guest").max(10),
+  roomType: z.enum(["standard_twin", "single_upgrade"]),
   termsAccepted: z.literal(true, {
     errorMap: () => ({ message: "You must accept the terms and conditions" }),
   }),
@@ -189,6 +217,10 @@ export default function BookingPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fallbackCheckoutUrl, setFallbackCheckoutUrl] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -209,6 +241,8 @@ export default function BookingPage() {
       email: "",
       mobile: "",
       instagram: "",
+      guestCount: 1,
+      roomType: "standard_twin",
       termsAccepted: undefined,
 
       passportFirstNameGivenName: "",
@@ -222,6 +256,7 @@ export default function BookingPage() {
   });
 
   const { isValid } = form.formState;
+  const selectedRoomType = form.watch("roomType");
 
   if (!config) {
     return (
@@ -245,13 +280,15 @@ export default function BookingPage() {
     );
   }
 
-  const onSubmit = (data: BookingFormData) => {
+  const onSubmit = async (data: BookingFormData) => {
     if (!PAYMENTS_ENABLED) {
       setIsSubmitting(false);
       return;
     }
 
     setIsSubmitting(true);
+    setSubmitError(null);
+    setFallbackCheckoutUrl(null);
 
     const attributes: Record<string, string> = {
       Trip: config.countryName,
@@ -259,6 +296,11 @@ export default function BookingPage() {
       Email: data.email,
       Mobile: data.mobile,
       Instagram: data.instagram?.trim() ? data.instagram.trim() : "Not provided",
+      "Number of Guests": String(data.guestCount ?? 1),
+      "Room Type":
+        data.roomType === "single_upgrade"
+          ? "Single Room Upgrade (+$X USD)"
+          : "Standard Twin Room (no extra charge)",
       "Terms Accepted": "Yes",
     };
 
@@ -272,13 +314,72 @@ export default function BookingPage() {
       attributes["Passport Expiry Date"] = data.passportExpiryDate || "";
     }
 
-    const productUrl = buildShopifyProductUrl({
-      shopifyDomain: config.shopifyDomain,
-      productHandle: config.productHandle,
-      attributes,
-    });
+    const quantity = Math.max(1, Number(data.guestCount) || 1);
 
-    window.location.href = productUrl;
+    if (config.variantId) {
+      try {
+        const availabilityResponse = await fetch(
+          `https://${config.shopifyDomain}/products/${config.productHandle}.js`
+        );
+
+        if (availabilityResponse.ok) {
+          const productData = await availabilityResponse.json();
+          const variants = Array.isArray(productData?.variants)
+            ? productData.variants
+            : [];
+          const earlyBirdVariant = variants.find(
+            (item: { id: number }) =>
+              String(item.id) === String(config.variantId)
+          );
+          const fallbackVariant = config.fallbackVariantId
+            ? variants.find(
+                (item: { id: number }) =>
+                  String(item.id) === String(config.fallbackVariantId)
+              )
+            : undefined;
+
+          if (earlyBirdVariant && !earlyBirdVariant.available) {
+            if (config.fallbackVariantId) {
+              const fallbackUrl = buildShopifyCheckoutUrl({
+                shopifyDomain: config.shopifyDomain,
+                variantId: config.fallbackVariantId,
+                quantity,
+                attributes,
+              });
+              setFallbackCheckoutUrl(fallbackUrl);
+              if (fallbackVariant && !fallbackVariant.available) {
+                setSubmitError("This Trip is Sold Out");
+              } else {
+                setSubmitError(
+                  "Early bird pricing is sold out. Standard pricing is still available."
+                );
+              }
+            } else {
+              setSubmitError("This Trip is Sold Out");
+            }
+            setIsSubmitting(false);
+            return;
+          }
+        }
+      } catch {
+        // If the availability check fails, continue to checkout attempt.
+      }
+    }
+
+    const destinationUrl = config.variantId
+      ? buildShopifyCheckoutUrl({
+          shopifyDomain: config.shopifyDomain,
+          variantId: config.variantId,
+          quantity,
+          attributes,
+        })
+      : buildShopifyProductUrl({
+          shopifyDomain: config.shopifyDomain,
+          productHandle: config.productHandle,
+          attributes,
+        });
+
+    window.location.href = destinationUrl;
   };
 
   const paymentDisabled = !PAYMENTS_ENABLED;
@@ -385,6 +486,61 @@ export default function BookingPage() {
                         />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="guestCount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Number of Guests *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          max={10}
+                          step={1}
+                          {...field}
+                          className="h-11"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="roomType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Room Type</FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="h-11">
+                            <SelectValue placeholder="Select a room type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="standard_twin">
+                              Standard twin room (no extra charge)
+                            </SelectItem>
+                            <SelectItem value="single_upgrade">
+                              Single room upgrade (+$X USD)
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      {selectedRoomType === "single_upgrade" && (
+                        <div className="mt-2 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-foreground">
+                          We won’t charge for room upgrades now. We’ll follow up
+                          by email with the upgrade payment link.
+                        </div>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -513,6 +669,27 @@ export default function BookingPage() {
                     ? "Redirecting..."
                     : "Continue to Payment"}
                 </Button>
+
+                {submitError ? (
+                  <p className="text-sm text-destructive text-center pt-3">
+                    {submitError}
+                  </p>
+                ) : null}
+
+                {fallbackCheckoutUrl ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full h-12 text-base font-semibold"
+                    onClick={() => {
+                      window.location.href = fallbackCheckoutUrl;
+                    }}
+                  >
+                    Continue with standard price of $2,495
+                  </Button>
+                ) : null}
+
+
 
                 {paymentDisabled ? (
                   <p className="text-xs text-muted-foreground text-center pt-2">
