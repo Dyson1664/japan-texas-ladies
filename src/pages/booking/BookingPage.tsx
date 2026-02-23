@@ -474,7 +474,7 @@ export default function BookingPage2() {
                               Standard twin room (no extra charge)
                             </SelectItem>
                             <SelectItem value="single_upgrade">
-                              Single room upgrade (+$X USD)
+                              Single room upgrade (+$735 USD)
                             </SelectItem>
                           </SelectContent>
                         </Select>
