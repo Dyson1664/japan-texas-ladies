@@ -49,16 +49,14 @@ const BOOKING_CONFIG: Record<
     countryName: string;
     productHandle: string;
     variantId?: string;
-    fallbackVariantId?: string;
     requiresPassport: boolean;
     shopifyDomain: string;
   }
 > = {
   japan: {
     countryName: "Japan",
-    productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different
-    variantId: "45272110235827", // <-- REQUIRED to skip product page and go straight to checkout
-    fallbackVariantId: "45287018856627", // <-- Standard price variant (used if early bird sells out)
+    productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different eb:45272110235827 Continue save $100
+    variantId: "45272110235827", // <-- REQUIRED to skip product page and go straight to checkout st:45287018856627 Continue — Standard Price
     requiresPassport: false,
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
@@ -213,14 +211,12 @@ function DatePickerField(props: {
   );
 }
 
-export default function BookingPage() {
+export default function BookingPage2() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [fallbackCheckoutUrl, setFallbackCheckoutUrl] = useState<string | null>(
-    null
-  );
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -257,7 +253,6 @@ export default function BookingPage() {
 
   const { isValid } = form.formState;
   const selectedRoomType = form.watch("roomType");
-
   if (!config) {
     return (
       <div className="min-h-screen bg-background">
@@ -288,7 +283,6 @@ export default function BookingPage() {
 
     setIsSubmitting(true);
     setSubmitError(null);
-    setFallbackCheckoutUrl(null);
 
     const attributes: Record<string, string> = {
       Trip: config.countryName,
@@ -315,56 +309,6 @@ export default function BookingPage() {
     }
 
     const quantity = Math.max(1, Number(data.guestCount) || 1);
-
-    if (config.variantId) {
-      try {
-        const availabilityResponse = await fetch(
-          `https://${config.shopifyDomain}/products/${config.productHandle}.js`
-        );
-
-        if (availabilityResponse.ok) {
-          const productData = await availabilityResponse.json();
-          const variants = Array.isArray(productData?.variants)
-            ? productData.variants
-            : [];
-          const earlyBirdVariant = variants.find(
-            (item: { id: number }) =>
-              String(item.id) === String(config.variantId)
-          );
-          const fallbackVariant = config.fallbackVariantId
-            ? variants.find(
-                (item: { id: number }) =>
-                  String(item.id) === String(config.fallbackVariantId)
-              )
-            : undefined;
-
-          if (earlyBirdVariant && !earlyBirdVariant.available) {
-            if (config.fallbackVariantId) {
-              const fallbackUrl = buildShopifyCheckoutUrl({
-                shopifyDomain: config.shopifyDomain,
-                variantId: config.fallbackVariantId,
-                quantity,
-                attributes,
-              });
-              setFallbackCheckoutUrl(fallbackUrl);
-              if (fallbackVariant && !fallbackVariant.available) {
-                setSubmitError("This Trip is Sold Out");
-              } else {
-                setSubmitError(
-                  "Early bird pricing is sold out. Standard pricing is still available."
-                );
-              }
-            } else {
-              setSubmitError("This Trip is Sold Out");
-            }
-            setIsSubmitting(false);
-            return;
-          }
-        }
-      } catch {
-        // If the availability check fails, continue to checkout attempt.
-      }
-    }
 
     const destinationUrl = config.variantId
       ? buildShopifyCheckoutUrl({
@@ -667,26 +611,13 @@ export default function BookingPage() {
                     ? "Payments Opening Soon"
                     : isSubmitting
                     ? "Redirecting..."
-                    : "Continue to Payment"}
+                    : "Continue save $100"}
                 </Button>
 
                 {submitError ? (
                   <p className="text-sm text-destructive text-center pt-3">
                     {submitError}
                   </p>
-                ) : null}
-
-                {fallbackCheckoutUrl ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full h-12 text-base font-semibold"
-                    onClick={() => {
-                      window.location.href = fallbackCheckoutUrl;
-                    }}
-                  >
-                    Continue with standard price of $2,495
-                  </Button>
                 ) : null}
 
 
@@ -710,3 +641,14 @@ export default function BookingPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
