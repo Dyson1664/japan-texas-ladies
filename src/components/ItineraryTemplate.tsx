@@ -1357,9 +1357,13 @@ export const ItineraryTemplate = memo(
         >
           {/* Mobile: Show only main image */}
           <div className="md:hidden relative w-full h-full">
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${data.heroImage})` }}
+            <img
+              src={data.heroImage}
+              alt={`${data.title} hero`}
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
             />
             {/* Tour Start Date Badge - Mobile Only */}
             {(data.slug === "india-journey" ||
