@@ -55,8 +55,8 @@ const BOOKING_CONFIG: Record<
 > = {
   japan: {
     countryName: "Japan",
-    productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different eb:45272110235827 Continue save $100
-    variantId: "45287018856627", // <-- REQUIRED to skip product page and go straight to checkout
+    productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different eb:45272110235827 Continue save $100 normal price: 45287018856627
+    variantId: "45272110235827", // <-- REQUIRED to skip product page and go straight to checkout
     requiresPassport: false,
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
@@ -360,6 +360,18 @@ export default function BookingPage2() {
                   </div>
                 </div>
 
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                  <p className="text-sm font-semibold text-foreground">
+                    Payment Plan
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                    Secure your spot with a $650 deposit, then complete your
+                    remaining balance in 2 installments: one in August 2026, and
+                    a final payment that must be made 100 days before the trip
+                    start date.
+                  </p>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="fullName"
@@ -611,7 +623,7 @@ export default function BookingPage2() {
                     ? "Payments Opening Soon"
                     : isSubmitting
                     ? "Redirecting..."
-                    : "Continue Standard Price"}
+                    : "Continue save $100"}
                 </Button>
 
                 {submitError ? (
@@ -628,7 +640,7 @@ export default function BookingPage2() {
                   </p>
                 ) : (
                   <p className="text-xs text-muted-foreground text-center pt-2">
-                    You will be redirected to Shopify to choose your pricing tier and checkout.
+                    You will be redirected to Shopify to checkout.
                   </p>
                 )}
               </form>

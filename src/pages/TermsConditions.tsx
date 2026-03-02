@@ -22,7 +22,7 @@ const TERMS_SECTIONS = [
       "IBT Tours (Imagine Beyond Travel) is the merchant of record and processes payments via Shopify Payments or authorized processors.",
       "A deposit (or booking fee where applicable) is required to secure your place. All deposits and all balance payments are strictly non-refundable.",
       "Any payment made toward the tour (including deposits and installments) is non-refundable and forfeited in the event of cancellation by the traveler, no-show, late arrival, early departure, or failure to meet entry, passport, visa, or health requirements.",
-      "The remaining balance must be paid in full no later than 90 days prior to tour start. Failure to pay may result in cancellation with all amounts forfeited.",
+      "The remaining balance must be paid in full no later than 100 days before the trip start date. Failure to pay may result in cancellation with all amounts forfeited.",
       "All prices are quoted and charged in United States Dollars (USD).",
       "All participants must be 18 years of age or older at the time of booking.",
     ],

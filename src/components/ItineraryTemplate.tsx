@@ -90,6 +90,7 @@ interface CountryData {
   duration: string;
   heroImage: string;
   price?: string;
+  priceOriginal?: string;
   priceNote?: string;
   startDate?: string;
   overviewGallery?: string[];
@@ -1183,7 +1184,20 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
 
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">From</p>
-            <p className="text-3xl font-bold text-foreground">{data.price || "USD $1,399"}</p>
+            {data.priceOriginal ? (
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl text-muted-foreground line-through">
+                  {data.priceOriginal}
+                </span>
+                <span className="text-3xl font-bold text-foreground">
+                  {data.price || "USD $1,399"}
+                </span>
+              </div>
+            ) : (
+              <p className="text-3xl font-bold text-foreground">
+                {data.price || "USD $1,399"}
+              </p>
+            )}
             {data.priceNote && (
               <p className="text-xs text-muted-foreground">{data.priceNote}</p>
             )}
@@ -1419,9 +1433,20 @@ export const ItineraryTemplate = memo(
               <div className="absolute top-6 right-6 z-10">
                 <div className="bg-primary backdrop-blur-md border border-primary rounded-lg px-4 py-2">
                   <p className="text-xs text-white/90">From</p>
-                  <p className="text-xl font-bold text-white">
-                    {data.price || "USD $1,399"}
-                  </p>
+                  {data.priceOriginal ? (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-sm text-white/80 line-through">
+                        {data.priceOriginal}
+                      </span>
+                      <span className="text-xl font-bold text-white">
+                        {data.price || "USD $1,399"}
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-xl font-bold text-white">
+                      {data.price || "USD $1,399"}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-10">
@@ -1549,9 +1574,18 @@ export const ItineraryTemplate = memo(
   <div className="flex items-center justify-between gap-4">
     <div className="flex flex-col leading-tight space-y-0.5">
       <span className="text-sm text-muted-foreground">From</span>
-      <span className="text-xl font-bold text-foreground">
-        {data.price || "USD $1,399"}
-      </span>
+      {data.priceOriginal ? (
+        <span className="text-xl font-bold text-foreground">
+          <span className="mr-2 text-sm text-muted-foreground line-through">
+            {data.priceOriginal}
+          </span>
+          {data.price || "USD $1,399"}
+        </span>
+      ) : (
+        <span className="text-xl font-bold text-foreground">
+          {data.price || "USD $1,399"}
+        </span>
+      )}
       {data.priceNote && (
         <span className="text-[11px] text-muted-foreground leading-tight">
           {data.priceNote}
