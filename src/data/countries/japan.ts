@@ -73,9 +73,10 @@ const japanOverview = {
   location: "Japan",
   duration: "8 days",
   heroImage: texas5,
-  price: "$2,395",
+  price: "$2,495",
+  priceOriginal: "$2,395",
   startDate: "May 16th 2027",
-  priceNote: "First 6 bookings, then $2,495",
+  priceNote: "Early bird sold out",
   ctaLabel: "Reserve Now $650",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [

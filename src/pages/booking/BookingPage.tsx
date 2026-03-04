@@ -56,7 +56,7 @@ const BOOKING_CONFIG: Record<
   japan: {
     countryName: "Japan",
     productHandle: "japan-2027-deposit", // <-- CHANGE if your handle is different eb:45272110235827 Continue save $100 normal price: 45287018856627
-    variantId: "45272110235827", // <-- REQUIRED to skip product page and go straight to checkout
+    variantId: "45287018856627", // <-- REQUIRED to skip product page and go straight to checkout
     requiresPassport: false,
     shopifyDomain: "tbff.imaginebeyondtravel.com",
   },
@@ -623,7 +623,7 @@ export default function BookingPage2() {
                     ? "Payments Opening Soon"
                     : isSubmitting
                     ? "Redirecting..."
-                    : "Continue save $100"}
+                    : "Continue Standard Price"}
                 </Button>
 
                 {submitError ? (

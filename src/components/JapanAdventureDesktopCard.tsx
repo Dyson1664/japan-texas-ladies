@@ -52,7 +52,7 @@ export default function JapanAdventureDesktopCard({
   priceLabel = "$2,395",
   ctaLabel = "Reserve Now",
   tripSlug = "japan",
-  priceNote = "First 6 bookings, then $2,495",
+  priceNote = "Early bird sold out",
 }: JapanAdventureDesktopCardProps) {
   const bookingUrl = tripSlug ? `/#/booking/${tripSlug}` : "#";
 
