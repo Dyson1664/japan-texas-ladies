@@ -92,6 +92,7 @@ interface CountryData {
   price?: string;
   priceOriginal?: string;
   priceNote?: string;
+  soldOut?: boolean;
   startDate?: string;
   overviewGallery?: string[];
   overviewGallery2x?: (string | null)[]; // <-- new optional gallery for hero left grid
@@ -1183,33 +1184,57 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
           </div>
 
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">From</p>
-            {data.priceOriginal ? (
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl text-muted-foreground line-through">
-                  {data.priceOriginal}
-                </span>
-                <span className="text-3xl font-bold text-foreground">
-                  {data.price || "USD $1,399"}
-                </span>
+            {data.soldOut ? (
+              <div className="rounded-2xl border border-cyan-200/80 bg-gradient-to-r from-cyan-50 via-white to-teal-50 px-4 py-3 shadow-[0_18px_40px_-24px_rgba(15,194,191,0.45)]">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-base font-bold text-slate-800">Sold Out</p>
+                  <div className="text-right">
+                    <p className="text-[11px] text-slate-600">From</p>
+                    <p className="text-lg font-bold text-slate-900">
+                      {data.price || "USD $1,399"}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-1 text-sm leading-5 text-slate-600">
+                  <span className="block font-semibold text-[#0fc2bf]">
+                    Join the waitlist
+                  </span>
+                  Email <span className="font-semibold text-[#0b8f8d]">bookings@imaginebeyondtravel.com</span>
+                </p>
               </div>
             ) : (
-              <p className="text-3xl font-bold text-foreground">
-                {data.price || "USD $1,399"}
-              </p>
-            )}
-            {data.priceNote && (
-              <p className="text-xs text-muted-foreground">{data.priceNote}</p>
+              <>
+                <p className="text-sm text-muted-foreground">From</p>
+                {data.priceOriginal ? (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl text-muted-foreground line-through">
+                      {data.priceOriginal}
+                    </span>
+                    <span className="text-3xl font-bold text-foreground">
+                      {data.price || "USD $1,399"}
+                    </span>
+                  </div>
+                ) : (
+                  <p className="text-3xl font-bold text-foreground">
+                    {data.price || "USD $1,399"}
+                  </p>
+                )}
+                {data.priceNote && (
+                  <p className="text-xs text-muted-foreground">{data.priceNote}</p>
+                )}
+              </>
             )}
           </div>
 
-          {bookingUrl === "#" ? (
+          {data.soldOut ? null : bookingUrl === "#" ? (
             <Button
               size="default"
-              className="w-full bg-muted text-muted-foreground rounded-xl font-semibold cursor-not-allowed"
+              className="h-auto w-full rounded-2xl border border-cyan-200/80 bg-gradient-to-r from-cyan-50 via-white to-teal-50 px-4 py-3 text-slate-700 shadow-[0_18px_40px_-24px_rgba(15,194,191,0.45)] cursor-not-allowed disabled:opacity-100"
               disabled
             >
-              COMING SOON
+              <span className="flex flex-col items-center leading-tight">
+                <span className="text-sm font-semibold">Sold Out</span>
+              </span>
             </Button>
           ) : (
             <a href={bookingUrl} className="block">
@@ -1572,47 +1597,77 @@ export const ItineraryTemplate = memo(
 {/* Mobile Sticky Booking Bar */}
 <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-1 shadow-lg">
   <div className="flex items-center justify-between gap-4">
-    <div className="flex flex-col leading-tight space-y-0.5">
-      <span className="text-sm text-muted-foreground">From</span>
-      {data.priceOriginal ? (
-        <span className="text-xl font-bold text-foreground">
-          <span className="mr-2 text-sm text-muted-foreground line-through">
-            {data.priceOriginal}
-          </span>
-          {data.price || "USD $1,399"}
-        </span>
+    <div className={`${data.soldOut ? "w-full" : ""} flex flex-col leading-tight space-y-0.5`}>
+      {data.soldOut ? (
+        <div className="rounded-2xl border border-cyan-200/80 bg-gradient-to-r from-cyan-50 via-white to-teal-50 px-4 py-2 shadow-[0_18px_40px_-24px_rgba(15,194,191,0.45)]">
+          <div className="flex items-start justify-between gap-3">
+            <span className="text-[13px] font-bold leading-4 text-slate-800">
+              Sold Out
+            </span>
+            <div className="text-right">
+              <span className="block text-[10px] text-slate-600">From</span>
+              <p className="text-sm font-bold text-slate-900">
+                {data.price || "USD $1,399"}
+              </p>
+            </div>
+          </div>
+          <p className="-mt-0.5 text-[11px] leading-4 text-slate-600">
+            <span className="block text-[10px] font-semibold leading-3 text-[#0fc2bf]">
+              Join the waitlist
+            </span>
+            Email <span className="font-semibold text-[#0b8f8d]">bookings@imaginebeyondtravel.com</span>
+          </p>
+        </div>
       ) : (
-        <span className="text-xl font-bold text-foreground">
-          {data.price || "USD $1,399"}
-        </span>
-      )}
-      {data.priceNote && (
-        <span className="text-[11px] text-muted-foreground leading-tight">
-          {data.priceNote}
-        </span>
+        <>
+          <span className="text-sm text-muted-foreground">From</span>
+          {data.priceOriginal ? (
+            <span className="text-xl font-bold text-foreground">
+              <span className="mr-2 text-sm text-muted-foreground line-through">
+                {data.priceOriginal}
+              </span>
+              {data.price || "USD $1,399"}
+            </span>
+          ) : (
+            <span className="text-xl font-bold text-foreground">
+              {data.price || "USD $1,399"}
+            </span>
+          )}
+          {data.priceNote && (
+            <span className="text-[11px] text-muted-foreground leading-tight">
+              {data.priceNote}
+            </span>
+          )}
+        </>
       )}
     </div>
 
     {(() => {
       const bookingUrl = getBookingUrlBySlug(data.slug);
 
+      if (data.soldOut) {
+        return null;
+      }
+
       if (bookingUrl === "#") {
         return (
           <Button
             size="default"
-            className="bg-muted text-muted-foreground rounded-full font-semibold px-8 cursor-not-allowed"
+            className="h-auto rounded-full border border-cyan-200/80 bg-gradient-to-r from-cyan-50 via-white to-teal-50 px-8 py-3 font-semibold text-slate-700 shadow-[0_18px_40px_-24px_rgba(15,194,191,0.45)] cursor-not-allowed disabled:opacity-100"
             disabled
           >
-            COMING SOON
+            <span className="flex flex-col items-center leading-tight">
+              <span className="text-sm">Sold Out</span>
+            </span>
           </Button>
         );
       }
 
       return (
-        <a href={bookingUrl} className="flex-shrink-0">
+        <a href={bookingUrl} className="flex w-[56%] flex-shrink-0">
           <Button
             size="default"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-semibold px-6"
+            className="h-9 w-full rounded-full bg-primary px-3 text-[11px] font-semibold tracking-[0.08em] text-primary-foreground hover:bg-primary/90"
           >
             RESERVE NOW $650
           </Button>

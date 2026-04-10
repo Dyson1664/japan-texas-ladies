@@ -44,6 +44,7 @@ type JapanAdventureDesktopCardProps = {
   ctaLabel?: string;
   tripSlug?: string;
   priceNote?: string;
+  soldOut?: boolean;
 };
 
 export default function JapanAdventureDesktopCard({
@@ -53,6 +54,7 @@ export default function JapanAdventureDesktopCard({
   ctaLabel = "Reserve Now",
   tripSlug = "japan",
   priceNote = "Early bird sold out",
+  soldOut = false,
 }: JapanAdventureDesktopCardProps) {
   const bookingUrl = tripSlug ? `/#/booking/${tripSlug}` : "#";
 
@@ -94,20 +96,42 @@ export default function JapanAdventureDesktopCard({
           </div>
 
           <div className="min-w-[240px] pt-1 text-right">
-            <p className="text-lg text-slate-700">
-              From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">{priceLabel}</span>
-            </p>
-            {priceNote && (
-              <p className="mt-1 text-xs text-slate-500">{priceNote}</p>
+            {soldOut ? (
+              <div className="ml-auto flex max-w-[280px] flex-col items-end gap-1 rounded-[20px] border border-cyan-200/80 bg-gradient-to-br from-cyan-50 via-white to-teal-50 px-4 py-2 text-right shadow-[0_18px_40px_-24px_rgba(15,194,191,0.45)]">
+                <div className="flex w-full items-start justify-between gap-3">
+                  <span className="text-base font-bold text-slate-800">
+                    Sold Out
+                  </span>
+                  <p className="text-right text-[11px] leading-4 text-slate-600">
+                    <span className="block">From</span>
+                    <span className="text-base font-bold text-slate-900">{priceLabel}</span>
+                  </p>
+                </div>
+                <p className="text-xs leading-4 text-slate-600">
+                  <span className="block text-[11px] font-semibold text-[#0fc2bf]">
+                    Join the waitlist
+                  </span>
+                  Email <span className="font-semibold text-[#0b8f8d]">bookings@imaginebeyondtravel.com</span>
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="text-lg text-slate-700">
+                  From <span className="text-3xl font-extrabold text-slate-900 lg:text-4xl">{priceLabel}</span>
+                </p>
+                {priceNote && (
+                  <p className="mt-1 text-xs text-slate-500">{priceNote}</p>
+                )}
+              <a href={bookingUrl} className="inline-flex">
+                <button
+                  type="button"
+                  className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
+                >
+                  {ctaLabel}
+                </button>
+              </a>
+              </>
             )}
-            <a href={bookingUrl} className="inline-flex">
-              <button
-                type="button"
-                className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
-              >
-                {ctaLabel}
-              </button>
-            </a>
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ const JapanItinerary = () => {
             priceNote={japanData.priceNote}
             ctaLabel={japanData.ctaLabel}
             tripSlug={japanData.slug}
+            soldOut={japanData.soldOut}
           />
         </div>
       }

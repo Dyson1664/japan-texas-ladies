@@ -77,6 +77,7 @@ const japanOverview = {
   priceOriginal: "$2,395",
   startDate: "May 16th 2027",
   priceNote: "Early bird sold out",
+  soldOut: true,
   ctaLabel: "Reserve Now $650",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [
