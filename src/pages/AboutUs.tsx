@@ -8,9 +8,9 @@ import aboutus1 from "@/assets/about-us-1.jpeg";
 import aboutus2 from "@/assets/about-us-2.jpeg";
 
 // NEW: team photos (place these files in /src/assets/)
-import aboutusDarrin from "@/assets/darrin5.png";
+import aboutusDarrin from "@/assets/darrin5.webp";
 //import aboutusDave from "@/assets/dave.jpg";
-import aboutusDave from "@/assets/dave8.png";
+import aboutusDave from "@/assets/dave8.webp";
 
 
 // Founders data

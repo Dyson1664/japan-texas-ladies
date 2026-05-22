@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { NAVIGATION_TRIPS } from "@/data/navigation";
-import ibtLogo from "@/assets/ibt-logo.png";
+import ibtLogo from "@/assets/ibt-logo.webp";
 
 const TBFFFooter = () => {
   return (

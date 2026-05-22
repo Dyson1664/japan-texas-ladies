@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ibtLogo from "@/assets/ibt-logo.png";
+import ibtLogo from "@/assets/ibt-logo.webp";
 
 const Footer = () => {
   return (

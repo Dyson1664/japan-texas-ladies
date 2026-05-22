@@ -9,11 +9,11 @@ import texasday from "@/assets/texasday.jpg";
 import japanHero from "@/assets/japan-hero.jpg";
 
 import texas1 from "@/assets/texas1.jpeg";
-import texas2 from "@/assets/texas2.jpeg";
-import texas3 from "@/assets/texas3.jpeg";
+import texas2 from "@/assets/texas2.webp";
+import texas3 from "@/assets/texas3.webp";
 import texas4 from "@/assets/texas4.jpeg";
-import texas5 from "@/assets/texas5.jpeg";
-import texas6 from "@/assets/texas6.jpeg";
+import texas5 from "@/assets/texas5.webp";
+import texas6 from "@/assets/texas6.webp";
 
 import texasreel1 from "@/assets/tokyo.mp4";
 
@@ -122,14 +122,19 @@ export default function JapanAdventureDesktopCard({
                 {priceNote && (
                   <p className="mt-1 text-xs text-slate-500">{priceNote}</p>
                 )}
-              <a href={bookingUrl} className="inline-flex">
-                <button
-                  type="button"
-                  className="mt-2 rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
-                >
-                  {ctaLabel}
-                </button>
-              </a>
+              <div className="mt-2 flex flex-col items-end">
+                <a href={bookingUrl} className="inline-flex">
+                  <button
+                    type="button"
+                    className="rounded-full bg-[#0fc2bf] px-5 py-2 text-base font-bold text-white transition hover:brightness-95"
+                  >
+                    {ctaLabel}
+                  </button>
+                </a>
+                <span className="mt-1 text-right text-[10px] leading-3 text-slate-500">
+                  Deposit is non-refundable
+                </span>
+              </div>
               </>
             )}
           </div>

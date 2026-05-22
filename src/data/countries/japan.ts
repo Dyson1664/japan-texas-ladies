@@ -5,21 +5,21 @@ import japanGarden from "@/assets/japan-garden.jpg";
 import japanTokyo from "@/assets/japan-tokyo.jpg";
 import japanSushi from "@/assets/japan-sushi.jpg";
 import japanTorii from "@/assets/japan-torii.jpg";
-import japanMtFuji from "@/assets/japan-mt-fuji.jpg";
+import japanMtFuji from "@/assets/japan-mt-fuji.webp";
 
 import texas1 from "@/assets/texas1.jpeg";
-import texas2 from "@/assets/texas2.jpeg";
-import texas3 from "@/assets/texas3.jpeg";
+import texas2 from "@/assets/texas2.webp";
+import texas3 from "@/assets/texas3.webp";
 import texas4 from "@/assets/texas4.jpeg";
-import texas5 from "@/assets/texas5.jpeg";
-import texas6 from "@/assets/texas6.jpeg";
-import texas7 from "@/assets/texas7.jpeg";
+import texas5 from "@/assets/texas5.webp";
+import texas6 from "@/assets/texas6.webp";
+import texas7 from "@/assets/texas7.webp";
 
 
-import texasday1 from "@/assets/texasday1.jpg";
+import texasday1 from "@/assets/texasday1.webp";
 import texasday2 from "@/assets/texasday2.jpg";
 import texasday3 from "@/assets/texasday3.jpg";
-import texasday5 from "@/assets/texasday5.jpeg";
+import texasday5 from "@/assets/texasday5.webp";
 import texasday from "@/assets/texasday.jpg";
 
 import mtfujiReel from "@/assets/japan/mt-fuji.mp4";

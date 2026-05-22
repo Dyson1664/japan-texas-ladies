@@ -1244,6 +1244,9 @@ const StickyBookingCard = memo(({ data }: { data: CountryData }) => {
               >
                 RESERVE NOW $650
               </Button>
+              <p className="mt-2 text-center text-[11px] leading-4 text-muted-foreground">
+                Deposit is non-refundable
+              </p>
             </a>
           )}
 
@@ -1664,13 +1667,16 @@ export const ItineraryTemplate = memo(
       }
 
       return (
-        <a href={bookingUrl} className="flex w-[56%] flex-shrink-0">
+        <a href={bookingUrl} className="flex w-[56%] flex-shrink-0 flex-col items-center">
           <Button
             size="default"
             className="h-9 w-full rounded-full bg-primary px-3 text-[11px] font-semibold tracking-[0.08em] text-primary-foreground hover:bg-primary/90"
           >
             RESERVE NOW $650
           </Button>
+          <span className="mt-0.5 text-center text-[9px] leading-3 text-muted-foreground">
+            Deposit is non-refundable
+          </span>
         </a>
       );
     })()}
