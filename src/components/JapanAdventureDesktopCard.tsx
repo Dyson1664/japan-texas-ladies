@@ -50,10 +50,10 @@ type JapanAdventureDesktopCardProps = {
 export default function JapanAdventureDesktopCard({
   leftMediaVideoSrc,
   title = "Best of Japan",
-  priceLabel = "$2,395",
+  priceLabel = "$2,495",
   ctaLabel = "Reserve Now",
   tripSlug = "japan",
-  priceNote = "Early bird sold out",
+  priceNote = "New Spots Added",
   soldOut = false,
 }: JapanAdventureDesktopCardProps) {
   const bookingUrl = tripSlug ? `/#/booking/${tripSlug}` : "#";

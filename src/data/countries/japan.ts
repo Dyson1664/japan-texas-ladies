@@ -74,10 +74,8 @@ const japanOverview = {
   duration: "8 days",
   heroImage: texas5,
   price: "$2,495",
-  priceOriginal: "$2,395",
   startDate: "May 16th 2027",
-  priceNote: "Early bird sold out",
-  soldOut: true,
+  priceNote: "New Spots Added",
   ctaLabel: "Reserve Now $650",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [
