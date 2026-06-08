@@ -6,6 +6,10 @@
     }
   },
   "redirects": [
+    { "source": "/auth/callback", "destination": "/#/auth/callback", "permanent": false },
+    { "source": "/guest-login", "destination": "/#/guest-login", "permanent": false },
+    { "source": "/portal/dashboard", "destination": "/#/portal/dashboard", "permanent": false },
+    { "source": "/admin/payments", "destination": "/#/admin/payments", "permanent": false },
     { "source": "/india-itinerary", "destination": "/#/india-itinerary", "permanent": false },
     { "source": "/japan-itinerary", "destination": "/#/japan-itinerary", "permanent": false },
     { "source": "/srilanka-itinerary", "destination": "/#/srilanka-itinerary", "permanent": false },

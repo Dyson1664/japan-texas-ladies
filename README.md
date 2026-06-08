@@ -60,6 +60,44 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Phase 1 guest payment portal
+
+The Phase 1 portal uses Supabase Auth magic links and Supabase tables for manual payment tracking.
+
+Routes:
+
+```txt
+/auth/callback
+/guest-login
+/portal/dashboard
+/admin/payments
+```
+
+Required frontend environment variables:
+
+```txt
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+```
+
+Database setup:
+
+1. Create a Supabase project.
+2. Run `supabase/migrations/20260607000000_phase1_payment_portal.sql` in the Supabase SQL editor or through the Supabase CLI.
+3. Add at least one row to `admin_users` for the admin email that should access `/admin/payments`.
+4. Create guest booking rows and payment installment rows through `/admin/payments`.
+
+Payment workflow:
+
+1. Admin manually creates Shopify payment links in Shopify.
+2. Admin pastes those links into each payment installment in `/admin/payments`.
+3. Guest logs in through `/guest-login` with the email used for their booking.
+4. Guest opens the Shopify payment link from `/portal/dashboard` and pays on Shopify.
+5. The portal tells guests that payment status may take up to 48 hours to update.
+6. Admin checks Shopify and manually updates the installment status in `/admin/payments`.
+
+There are no Shopify webhooks, Shopify Admin API calls, automatic draft order creation, or automatic paid-status updates in Phase 1.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/55f765f5-bef4-4be9-88d6-60c91d2d3a8b) and click on Share -> Publish.

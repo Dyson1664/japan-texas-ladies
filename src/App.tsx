@@ -13,6 +13,10 @@ import JapanAdventureCardPreview from "./pages/JapanAdventureCardPreview";
 import JapanItinerary from "./pages/JapanItinerary";
 
 import BookingPage from "./pages/booking/BookingPage";
+import AuthCallback from "./pages/AuthCallback";
+import GuestLogin from "./pages/GuestLogin";
+import PortalDashboard from "./pages/PortalDashboard";
+import AdminPayments from "./pages/AdminPayments";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +36,10 @@ const App = () => (
           <Route path="/" element={<JapanItinerary />} />
           <Route path="/bali-itinerary" element={<JapanAdventureCardPreview />} />
           <Route path="/booking/:slug" element={<BookingPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/guest-login" element={<GuestLogin />} />
+          <Route path="/portal/dashboard" element={<PortalDashboard />} />
+          <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/japan-adventure-preview" element={<JapanAdventureCardPreview />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
