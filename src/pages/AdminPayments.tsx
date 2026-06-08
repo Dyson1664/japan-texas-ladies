@@ -20,10 +20,80 @@ import type { GuestBooking, PaymentInstallment, PaymentStatus, PaymentType } fro
 const statuses: PaymentStatus[] = ["paid", "upcoming", "due_now", "pending_confirmation", "overdue"];
 const paymentTypes: PaymentType[] = ["deposit", "balance_1", "balance_2", "other"];
 
+type PackageType =
+  | "early_bird"
+  | "standard_twin_sharing"
+  | "single_room_supplement"
+  | "single_room_supplement_early_bird";
+
+type PackageTemplate = {
+  type: PackageType;
+  name: string;
+  totalTripPrice: number;
+  deposit: number;
+  balanceRemaining: number;
+  balance1: number;
+  balance2: number;
+  balance1DueDate: string;
+  balance2DueDate: string;
+};
+
+const packageTemplates: PackageTemplate[] = [
+  {
+    type: "early_bird",
+    name: "Early Bird Standard",
+    totalTripPrice: 2395,
+    deposit: 650,
+    balanceRemaining: 1745,
+    balance1: 870,
+    balance2: 875,
+    balance1DueDate: "2026-08-15",
+    balance2DueDate: "2027-02-05",
+  },
+  {
+    type: "single_room_supplement_early_bird",
+    name: "Early Bird Room Supplement",
+    totalTripPrice: 3130,
+    deposit: 650,
+    balanceRemaining: 2480,
+    balance1: 1240,
+    balance2: 1240,
+    balance1DueDate: "2026-08-15",
+    balance2DueDate: "2027-02-05",
+  },
+  {
+    type: "standard_twin_sharing",
+    name: "Standard",
+    totalTripPrice: 2495,
+    deposit: 650,
+    balanceRemaining: 1845,
+    balance1: 920,
+    balance2: 925,
+    balance1DueDate: "2026-08-15",
+    balance2DueDate: "2027-02-05",
+  },
+  {
+    type: "single_room_supplement",
+    name: "Standard Room Supplement",
+    totalTripPrice: 3230,
+    deposit: 650,
+    balanceRemaining: 2580,
+    balance1: 1290,
+    balance2: 1290,
+    balance1DueDate: "2026-08-15",
+    balance2DueDate: "2027-02-05",
+  },
+];
+
+function getPackageTemplate(type?: string | null) {
+  return packageTemplates.find((template) => template.type === type);
+}
+
 const emptyBooking = {
   guest_name: "",
   guest_email: "",
   trip_name: "",
+  package_type: "",
   package_name: "",
   total_trip_price: 0,
   deposit_amount: 0,
@@ -41,7 +111,7 @@ const emptyInstallment = {
   upgrade_portion: 0,
   discount_amount: 0,
   total_amount: 0,
-  currency: "GBP",
+  currency: "USD",
   due_date: "",
   status: "upcoming" as PaymentStatus,
   shopify_payment_link: "",
@@ -52,14 +122,52 @@ type BookingForm = typeof emptyBooking & { id?: string };
 type InstallmentForm = typeof emptyInstallment & { id?: string; guest_booking_id?: string };
 
 function money(value: number | null | undefined) {
-  return new Intl.NumberFormat("en-GB", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "GBP",
+    currency: "USD",
   }).format(Number(value || 0));
 }
 
 function toNumber(value: FormDataEntryValue | null) {
   return Number(value || 0);
+}
+
+function templateInstallments(template: PackageTemplate) {
+  return [
+    {
+      payment_label: "Deposit",
+      payment_type: "deposit" as PaymentType,
+      base_amount: template.deposit,
+      upgrade_portion: 0,
+      discount_amount: 0,
+      total_amount: template.deposit,
+      currency: "USD",
+      due_date: null,
+      status: "paid" as PaymentStatus,
+    },
+    {
+      payment_label: "Balance Payment 1",
+      payment_type: "balance_1" as PaymentType,
+      base_amount: template.balance1,
+      upgrade_portion: 0,
+      discount_amount: 0,
+      total_amount: template.balance1,
+      currency: "USD",
+      due_date: template.balance1DueDate,
+      status: "due_now" as PaymentStatus,
+    },
+    {
+      payment_label: "Balance Payment 2",
+      payment_type: "balance_2" as PaymentType,
+      base_amount: template.balance2,
+      upgrade_portion: 0,
+      discount_amount: 0,
+      total_amount: template.balance2,
+      currency: "USD",
+      due_date: template.balance2DueDate,
+      status: "upcoming" as PaymentStatus,
+    },
+  ];
 }
 
 export default function AdminPayments() {
@@ -76,6 +184,41 @@ export default function AdminPayments() {
   const [installmentForm, setInstallmentForm] = useState<InstallmentForm>(emptyInstallment);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+
+  function applyPackageTemplate(type: string) {
+    const template = getPackageTemplate(type);
+    if (!template) return;
+
+    setBookingForm((current) => ({
+      ...current,
+      package_type: template.type,
+      package_name: template.name,
+      total_trip_price: template.totalTripPrice,
+      deposit_amount: template.deposit,
+      balance_remaining: template.balanceRemaining,
+      room_upgrade_enabled: template.name.toLowerCase().includes("single room"),
+      room_upgrade_name: template.name.toLowerCase().includes("single room")
+        ? "Single room supplement"
+        : current.room_upgrade_name,
+      room_upgrade_total: template.name.toLowerCase().includes("single room")
+        ? template.totalTripPrice - getPackageTemplate("standard_twin_sharing")!.totalTripPrice
+        : current.room_upgrade_total,
+    }));
+
+    const firstBalance = templateInstallments(template).find(
+      (payment) => payment.payment_type === "balance_1",
+    );
+
+    if (firstBalance) {
+      setInstallmentForm((current) => ({
+        ...current,
+        ...firstBalance,
+        due_date: firstBalance.due_date || "",
+        shopify_payment_link: current.shopify_payment_link,
+        admin_notes: current.admin_notes,
+      }));
+    }
+  }
 
   async function loadData() {
     if (!supabase) {
@@ -139,6 +282,7 @@ export default function AdminPayments() {
       guest_name: booking.guest_name || "",
       guest_email: booking.guest_email || "",
       trip_name: booking.trip_name || "",
+      package_type: booking.package_type || "",
       package_name: booking.package_name || "",
       total_trip_price: Number(booking.total_trip_price || 0),
       deposit_amount: Number(booking.deposit_amount || 0),
@@ -163,7 +307,7 @@ export default function AdminPayments() {
       upgrade_portion: Number(installment.upgrade_portion || 0),
       discount_amount: Number(installment.discount_amount || 0),
       total_amount: Number(installment.total_amount || 0),
-      currency: installment.currency || "GBP",
+      currency: installment.currency || "USD",
       due_date: installment.due_date || "",
       status: installment.status,
       shopify_payment_link: installment.shopify_payment_link || "",
@@ -194,6 +338,34 @@ export default function AdminPayments() {
     }, {} as Record<PaymentStatus, number>);
   }, [installments]);
 
+  async function applyTemplateScheduleToBooking(bookingId: string, template: PackageTemplate) {
+    if (!supabase) return;
+
+    const existingRows = installments.filter((item) => item.guest_booking_id === bookingId);
+
+    for (const payment of templateInstallments(template)) {
+      const existing = existingRows.find((item) => item.payment_type === payment.payment_type);
+      const payload = {
+        guest_booking_id: bookingId,
+        ...payment,
+        shopify_payment_link: existing?.shopify_payment_link || "",
+        admin_notes: existing?.admin_notes || "",
+        paid_at:
+          payment.status === "paid"
+            ? existing?.paid_at || new Date().toISOString()
+            : existing?.paid_at || null,
+      };
+
+      const { error: scheduleError } = existing
+        ? await supabase.from("payment_installments").update(payload).eq("id", existing.id)
+        : await supabase.from("payment_installments").insert(payload);
+
+      if (scheduleError) {
+        throw scheduleError;
+      }
+    }
+  }
+
   async function saveBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!supabase) return;
@@ -203,6 +375,7 @@ export default function AdminPayments() {
       guest_name: String(formData.get("guest_name") || ""),
       guest_email: String(formData.get("guest_email") || "").toLowerCase(),
       trip_name: String(formData.get("trip_name") || ""),
+      package_type: bookingForm.package_type || null,
       package_name: String(formData.get("package_name") || ""),
       total_trip_price: toNumber(formData.get("total_trip_price")),
       deposit_amount: toNumber(formData.get("deposit_amount")),
@@ -223,7 +396,17 @@ export default function AdminPayments() {
       return;
     }
 
-    setMessage("Booking saved.");
+    const selectedTemplate = getPackageTemplate(bookingForm.package_type);
+    if (data && selectedTemplate) {
+      try {
+        await applyTemplateScheduleToBooking(data.id, selectedTemplate);
+      } catch (scheduleError) {
+        setError(scheduleError instanceof Error ? scheduleError.message : "Unable to apply package schedule.");
+        return;
+      }
+    }
+
+    setMessage(selectedTemplate ? "Booking and package payment schedule saved." : "Booking saved.");
     await loadData();
     if (data) selectBooking(data);
   }
@@ -242,7 +425,7 @@ export default function AdminPayments() {
       upgrade_portion: toNumber(formData.get("upgrade_portion")),
       discount_amount: toNumber(formData.get("discount_amount")),
       total_amount: toNumber(formData.get("total_amount")),
-      currency: String(formData.get("currency") || "GBP"),
+      currency: "USD",
       due_date: String(formData.get("due_date") || "") || null,
       status,
       shopify_payment_link: String(formData.get("shopify_payment_link") || ""),
@@ -382,6 +565,41 @@ export default function AdminPayments() {
           <div className="space-y-6">
             <form onSubmit={saveBooking} className="rounded-xl border bg-card p-5 shadow-sm">
               <h2 className="text-lg font-semibold text-foreground">Booking record</h2>
+              <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
+                <label className="mb-2 block text-sm font-medium text-foreground">
+                  Package type
+                </label>
+                <Select
+                  value={bookingForm.package_type || ""}
+                  onValueChange={applyPackageTemplate}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Select a package to auto-fill pricing" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {packageTemplates.map((template) => (
+                      <SelectItem key={template.type} value={template.type}>
+                        {template.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {getPackageTemplate(bookingForm.package_type) ? (
+                  <div className="mt-3 grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
+                    {templateInstallments(getPackageTemplate(bookingForm.package_type)!).map((payment) => (
+                      <div key={payment.payment_type} className="rounded-md bg-background px-3 py-2">
+                        <p className="font-semibold text-foreground">{payment.payment_label}</p>
+                        <p>{money(payment.total_amount)}</p>
+                        <p>{payment.due_date ? `Due ${payment.due_date}` : "Paid deposit"}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Selecting a package fills the booking totals and creates or updates Deposit,
+                  Balance Payment 1, and Balance Payment 2 when you save. Shopify links stay manual.
+                </p>
+              </div>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Input name="guest_name" value={bookingForm.guest_name} onChange={(e) => setBookingForm({ ...bookingForm, guest_name: e.target.value })} placeholder="Guest name" required />
                 <Input name="guest_email" type="email" value={bookingForm.guest_email} onChange={(e) => setBookingForm({ ...bookingForm, guest_email: e.target.value })} placeholder="Guest email" required />
@@ -451,7 +669,7 @@ export default function AdminPayments() {
                   <Input name="upgrade_portion" type="number" step="0.01" value={installmentForm.upgrade_portion} onChange={(e) => setInstallmentForm({ ...installmentForm, upgrade_portion: Number(e.target.value) })} placeholder="Upgrade portion" />
                   <Input name="discount_amount" type="number" step="0.01" value={installmentForm.discount_amount} onChange={(e) => setInstallmentForm({ ...installmentForm, discount_amount: Number(e.target.value) })} placeholder="Discount amount" />
                   <Input name="total_amount" type="number" step="0.01" value={installmentForm.total_amount} onChange={(e) => setInstallmentForm({ ...installmentForm, total_amount: Number(e.target.value) })} placeholder="Total due" />
-                  <Input name="currency" value={installmentForm.currency} onChange={(e) => setInstallmentForm({ ...installmentForm, currency: e.target.value })} placeholder="Currency" />
+                  <Input name="currency" value="USD" readOnly className="bg-muted" placeholder="Currency" />
                   <Input name="due_date" type="date" value={installmentForm.due_date} onChange={(e) => setInstallmentForm({ ...installmentForm, due_date: e.target.value })} />
                 </div>
 

@@ -12,6 +12,7 @@ export interface GuestBooking {
   guest_name: string;
   guest_email: string;
   trip_name: string;
+  package_type: string | null;
   package_name: string | null;
   total_trip_price: number;
   deposit_amount: number;

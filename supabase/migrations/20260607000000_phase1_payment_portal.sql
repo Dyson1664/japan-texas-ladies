@@ -11,6 +11,7 @@ create table if not exists public.guest_bookings (
   guest_name text not null,
   guest_email text not null,
   trip_name text not null,
+  package_type text,
   package_name text,
   total_trip_price numeric(10, 2) not null default 0,
   deposit_amount numeric(10, 2) not null default 0,

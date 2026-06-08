@@ -15,8 +15,8 @@ const statusLabels: Record<PaymentStatus, string> = {
   overdue: "Overdue",
 };
 
-function money(value: number | null | undefined, currency = "GBP") {
-  return new Intl.NumberFormat("en-GB", {
+function money(value: number | null | undefined, currency = "USD") {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
   }).format(Number(value || 0));
@@ -67,24 +67,24 @@ function PaymentCard({ installment }: { installment: PaymentInstallment }) {
           <dt className="text-muted-foreground">
             {isDeposit ? "Deposit amount" : "Base trip balance"}
           </dt>
-          <dd className="font-medium">{money(installment.base_amount, installment.currency)}</dd>
+          <dd className="font-medium">{money(installment.base_amount)}</dd>
         </div>
         {upgradePortion > 0 ? (
           <div className="flex justify-between gap-4">
             <dt className="text-muted-foreground">Room upgrade portion</dt>
-            <dd className="font-medium">{money(upgradePortion, installment.currency)}</dd>
+            <dd className="font-medium">{money(upgradePortion)}</dd>
           </div>
         ) : null}
         {discountAmount > 0 ? (
           <div className="flex justify-between gap-4">
             <dt className="text-muted-foreground">Discount</dt>
-            <dd className="font-medium">-{money(discountAmount, installment.currency)}</dd>
+            <dd className="font-medium">-{money(discountAmount)}</dd>
           </div>
         ) : null}
         <div className="flex justify-between gap-4 border-t pt-3 text-base">
           <dt className="font-semibold text-foreground">Total due</dt>
           <dd className="font-bold text-foreground">
-            {money(installment.total_amount, installment.currency)}
+            {money(installment.total_amount)}
           </dd>
         </div>
       </dl>
@@ -234,7 +234,7 @@ export default function PortalDashboard() {
             upgrade_portion: 0,
             discount_amount: 0,
             total_amount: booking.deposit_amount,
-            currency: "GBP",
+            currency: "USD",
             due_date: null,
             status: "paid" as const,
             shopify_payment_link: null,
@@ -250,6 +250,13 @@ export default function PortalDashboard() {
       (a, b) => priority[a.payment_type] - priority[b.payment_type],
     );
   }, [booking]);
+
+  const calculatedBalanceRemaining = useMemo(() => {
+    return sortedPayments
+      .filter((installment) => installment.payment_type !== "deposit")
+      .filter((installment) => installment.status !== "paid")
+      .reduce((total, installment) => total + Number(installment.total_amount || 0), 0);
+  }, [sortedPayments]);
 
   async function signOut() {
     await supabase?.auth.signOut();
@@ -321,7 +328,9 @@ export default function PortalDashboard() {
                   </div>
                   <div className="flex justify-between border-t pt-3 text-base">
                     <dt className="font-semibold text-foreground">Balance remaining</dt>
-                    <dd className="font-bold text-foreground">{money(booking.balance_remaining)}</dd>
+                    <dd className="font-bold text-foreground">
+                      {money(calculatedBalanceRemaining)}
+                    </dd>
                   </div>
                 </dl>
               </div>
