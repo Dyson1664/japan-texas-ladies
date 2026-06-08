@@ -89,6 +89,10 @@ function getPackageTemplate(type?: string | null) {
   return packageTemplates.find((template) => template.type === type);
 }
 
+function isRoomSupplementPackage(type?: string | null) {
+  return type === "single_room_supplement" || type === "single_room_supplement_early_bird";
+}
+
 const emptyBooking = {
   guest_name: "",
   guest_email: "",
@@ -177,6 +181,9 @@ export default function AdminPayments() {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [installmentMessage, setInstallmentMessage] = useState("");
+  const [installmentError, setInstallmentError] = useState("");
+  const [isSavingInstallment, setIsSavingInstallment] = useState(false);
   const [bookings, setBookings] = useState<GuestBooking[]>([]);
   const [installments, setInstallments] = useState<PaymentInstallment[]>([]);
   const [selectedBookingId, setSelectedBookingId] = useState<string>("");
@@ -196,11 +203,11 @@ export default function AdminPayments() {
       total_trip_price: template.totalTripPrice,
       deposit_amount: template.deposit,
       balance_remaining: template.balanceRemaining,
-      room_upgrade_enabled: template.name.toLowerCase().includes("single room"),
-      room_upgrade_name: template.name.toLowerCase().includes("single room")
-        ? "Single room supplement"
+      room_upgrade_enabled: isRoomSupplementPackage(template.type),
+      room_upgrade_name: isRoomSupplementPackage(template.type)
+        ? "Single room upgrade"
         : current.room_upgrade_name,
-      room_upgrade_total: template.name.toLowerCase().includes("single room")
+      room_upgrade_total: isRoomSupplementPackage(template.type)
         ? template.totalTripPrice - getPackageTemplate("standard_twin_sharing")!.totalTripPrice
         : current.room_upgrade_total,
     }));
@@ -415,6 +422,12 @@ export default function AdminPayments() {
     event.preventDefault();
     if (!supabase || !selectedBookingId) return;
 
+    setError("");
+    setMessage("");
+    setInstallmentError("");
+    setInstallmentMessage("");
+    setIsSavingInstallment(true);
+
     const formData = new FormData(event.currentTarget);
     const status = installmentForm.status;
     const payload = {
@@ -439,13 +452,15 @@ export default function AdminPayments() {
 
     const { data, error: saveError } = await query;
     if (saveError) {
-      setError(saveError.message);
+      setInstallmentError(saveError.message);
+      setIsSavingInstallment(false);
       return;
     }
 
-    setMessage("Payment installment saved.");
+    setInstallmentMessage("Payment installment saved.");
     await loadData();
     if (data) setInstallmentForm(fromInstallment(data));
+    setIsSavingInstallment(false);
   }
 
   if (isLoading) {
@@ -692,7 +707,19 @@ export default function AdminPayments() {
                   onChange={(e) => setInstallmentForm({ ...installmentForm, admin_notes: e.target.value })}
                   placeholder="Admin notes"
                 />
-                <Button type="submit" disabled={!selectedBookingId}>Save instalment</Button>
+                {installmentMessage ? (
+                  <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {installmentMessage}
+                  </div>
+                ) : null}
+                {installmentError ? (
+                  <div className="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                    {installmentError}
+                  </div>
+                ) : null}
+                <Button type="submit" disabled={!selectedBookingId || isSavingInstallment}>
+                  {isSavingInstallment ? "Saving instalment..." : "Save instalment"}
+                </Button>
               </form>
             </section>
           </div>

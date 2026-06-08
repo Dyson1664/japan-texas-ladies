@@ -41,6 +41,7 @@ function PaymentCard({ installment }: { installment: PaymentInstallment }) {
   const upgradePortion = Number(installment.upgrade_portion || 0);
   const discountAmount = Number(installment.discount_amount || 0);
   const isDeposit = installment.payment_type === "deposit";
+  const isBalancePayment = installment.payment_type === "balance_1" || installment.payment_type === "balance_2";
 
   return (
     <article className="rounded-xl border bg-card p-5 shadow-sm">
@@ -100,6 +101,12 @@ function PaymentCard({ installment }: { installment: PaymentInstallment }) {
               Payment link coming soon.
             </p>
           )}
+          {isBalancePayment ? (
+            <p className="mt-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-6 text-foreground">
+              After you pay this instalment through Shopify, please allow up to 48 hours
+              for our team to update this payment to paid.
+            </p>
+          ) : null}
         </div>
       ) : null}
     </article>
@@ -258,6 +265,16 @@ export default function PortalDashboard() {
       .reduce((total, installment) => total + Number(installment.total_amount || 0), 0);
   }, [sortedPayments]);
 
+  const hasSingleRoomUpgrade = useMemo(() => {
+    if (!booking) return false;
+    return (
+      Boolean(booking.room_upgrade_enabled) ||
+      booking.package_type === "single_room_supplement" ||
+      booking.package_type === "single_room_supplement_early_bird" ||
+      Boolean(booking.package_name?.toLowerCase().includes("room supplement"))
+    );
+  }, [booking]);
+
   async function signOut() {
     await supabase?.auth.signOut();
     navigate("/guest-login");
@@ -308,11 +325,44 @@ export default function PortalDashboard() {
                   <h2 className="mt-1 text-2xl font-bold text-foreground">{booking.guest_name}</h2>
                   <p className="mt-3 text-lg font-semibold text-primary">{booking.trip_name}</p>
                   {booking.package_name ? (
-                    <p className="mt-1 text-sm text-muted-foreground">{booking.package_name}</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{booking.package_name}</p>
                   ) : null}
-                  {booking.room_upgrade_enabled ? (
-                    <p className="mt-4 rounded-lg bg-primary/5 px-4 py-3 text-sm text-foreground">
-                      Your room upgrade has been split across your remaining balance payments.
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-lg border bg-background px-4 py-3">
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                        Package
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-foreground">
+                        {booking.package_name || "Package details"}
+                      </p>
+                    </div>
+                    <div
+                      className={`rounded-lg border px-4 py-3 ${
+                        hasSingleRoomUpgrade
+                          ? "border-primary/30 bg-primary/10"
+                          : "bg-background"
+                      }`}
+                    >
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                        Room type
+                      </p>
+                      <p
+                        className={`mt-1 text-sm font-bold ${
+                          hasSingleRoomUpgrade ? "text-primary" : "text-foreground"
+                        }`}
+                      >
+                        {hasSingleRoomUpgrade ? "Single room upgrade included" : "Shared room"}
+                      </p>
+                    </div>
+                  </div>
+                  {hasSingleRoomUpgrade ? (
+                    <p className="mt-4 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-6 text-foreground">
+                      Your booking includes a <span className="font-semibold">single room upgrade</span>
+                      {booking.room_upgrade_name ? `: ${booking.room_upgrade_name}` : ""}.
+                      {Number(booking.room_upgrade_total || 0) > 0
+                        ? ` The upgrade total is ${money(booking.room_upgrade_total)}.`
+                        : ""}{" "}
+                      This is already included in the balance payments shown below.
                     </p>
                   ) : null}
                 </div>
