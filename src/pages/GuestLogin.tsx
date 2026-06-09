@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getPortalRedirectUrl, isSupabaseConfigured, supabase } from "@/lib/supabase";
 
+const neutralLoginMessage =
+  "If this email is linked to a booking, you’ll receive a secure login link shortly.";
+
 export default function GuestLogin() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,15 +24,40 @@ export default function GuestLogin() {
       return;
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
     setIsSubmitting(true);
     const redirectTo = getPortalRedirectUrl("/auth/callback");
+
+    const { data: canRequestLogin, error: allowlistError } = await supabase.rpc(
+      "can_request_portal_login",
+      { input_email: normalizedEmail },
+    );
+
+    if (allowlistError) {
+      console.error("[portal-auth] portal login allowlist check failed", allowlistError);
+      setIsSubmitting(false);
+      setError("We could not process this request. Please try again.");
+      return;
+    }
+
+    console.log("[portal-auth] portal login request checked", {
+      allowed: Boolean(canRequestLogin),
+      emailRedirectTo: redirectTo,
+    });
+
+    if (!canRequestLogin) {
+      setIsSubmitting(false);
+      setMessage(neutralLoginMessage);
+      return;
+    }
+
     console.log("[portal-auth] Sending magic link", {
-      email: email.trim(),
+      email: normalizedEmail,
       emailRedirectTo: redirectTo,
     });
 
     const { error: authError } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
+      email: normalizedEmail,
       options: {
         emailRedirectTo: redirectTo,
       },
@@ -42,7 +70,7 @@ export default function GuestLogin() {
       return;
     }
 
-    setMessage("Check your email for your secure login link.");
+    setMessage(neutralLoginMessage);
   }
 
   return (
