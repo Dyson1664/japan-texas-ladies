@@ -79,7 +79,7 @@ const japanOverview = {
   ctaLabel: "Reserve Now $650",
   route: ["Tokyo", "Mt. Fuji", "Kyoto"],
   aboutDescription: [
-  "Discover Japan on a thoughtfully paced 8-day journey created for culture and ease. This Texas Ladies Get Outdoors & Travel experience takes you from the bright energy of Tokyo to the timeless beauty of Kyoto—blending iconic landmarks with meaningful moments.",
+  "Discover Japan on a thoughtfully paced 8-day journey created for culture and ease. This Texas Ladies Travel Collective experience takes you from the bright energy of Tokyo to the timeless beauty of Kyoto—blending iconic landmarks with meaningful moments.",
   "You’ll explore Japan’s traditions through tea ceremonies, temple visits, and carefully planned activities, with time to relax and take in your surroundings. From Mount Fuji views to serene gardens, the journey highlights both well-known sights and quieter corners.",
   "Every detail is thoughtfully planned to allow time for exploration and immersion in Japan’s history and daily life, showcasing the contrast between modern cities and centuries-old traditions across one of the world’s most fascinating countries."
 ]
