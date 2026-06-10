@@ -99,6 +99,7 @@ const emptyBooking = {
   trip_name: "",
   package_type: "",
   package_name: "",
+  itinerary_pdf_url: "",
   total_trip_price: 0,
   deposit_amount: 0,
   balance_remaining: 0,
@@ -291,6 +292,7 @@ export default function AdminPayments() {
       trip_name: booking.trip_name || "",
       package_type: booking.package_type || "",
       package_name: booking.package_name || "",
+      itinerary_pdf_url: booking.itinerary_pdf_url || "",
       total_trip_price: Number(booking.total_trip_price || 0),
       deposit_amount: Number(booking.deposit_amount || 0),
       balance_remaining: Number(booking.balance_remaining || 0),
@@ -384,6 +386,7 @@ export default function AdminPayments() {
       trip_name: String(formData.get("trip_name") || ""),
       package_type: bookingForm.package_type || null,
       package_name: String(formData.get("package_name") || ""),
+      itinerary_pdf_url: String(formData.get("itinerary_pdf_url") || ""),
       total_trip_price: toNumber(formData.get("total_trip_price")),
       deposit_amount: toNumber(formData.get("deposit_amount")),
       balance_remaining: toNumber(formData.get("balance_remaining")),
@@ -620,6 +623,7 @@ export default function AdminPayments() {
                 <Input name="guest_email" type="email" value={bookingForm.guest_email} onChange={(e) => setBookingForm({ ...bookingForm, guest_email: e.target.value })} placeholder="Guest email" required />
                 <Input name="trip_name" value={bookingForm.trip_name} onChange={(e) => setBookingForm({ ...bookingForm, trip_name: e.target.value })} placeholder="Trip name" required />
                 <Input name="package_name" value={bookingForm.package_name} onChange={(e) => setBookingForm({ ...bookingForm, package_name: e.target.value })} placeholder="Package / room summary" />
+                <Input name="itinerary_pdf_url" value={bookingForm.itinerary_pdf_url} onChange={(e) => setBookingForm({ ...bookingForm, itinerary_pdf_url: e.target.value })} placeholder="Itinerary PDF URL, e.g. /itineraries/texas-ladies-japan-itinerary.pdf" />
                 <Input name="total_trip_price" type="number" step="0.01" value={bookingForm.total_trip_price} onChange={(e) => setBookingForm({ ...bookingForm, total_trip_price: Number(e.target.value) })} placeholder="Total trip price" />
                 <Input name="deposit_amount" type="number" step="0.01" value={bookingForm.deposit_amount} onChange={(e) => setBookingForm({ ...bookingForm, deposit_amount: Number(e.target.value) })} placeholder="Deposit paid" />
                 <Input name="balance_remaining" type="number" step="0.01" value={bookingForm.balance_remaining} onChange={(e) => setBookingForm({ ...bookingForm, balance_remaining: Number(e.target.value) })} placeholder="Balance remaining" />

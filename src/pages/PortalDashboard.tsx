@@ -15,6 +15,8 @@ const statusLabels: Record<PaymentStatus, string> = {
   overdue: "Overdue",
 };
 
+const defaultItineraryPdfUrl = "/itineraries/texas-ladies-japan-itinerary.pdf";
+
 function money(value: number | null | undefined, currency = "USD") {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -275,6 +277,8 @@ export default function PortalDashboard() {
     );
   }, [booking]);
 
+  const itineraryPdfUrl = booking?.itinerary_pdf_url || defaultItineraryPdfUrl;
+
   async function signOut() {
     await supabase?.auth.signOut();
     navigate("/guest-login");
@@ -326,6 +330,19 @@ export default function PortalDashboard() {
                   <p className="mt-3 text-lg font-semibold text-primary">{booking.trip_name}</p>
                   {booking.package_name ? (
                     <p className="mt-1 text-sm font-medium text-foreground">{booking.package_name}</p>
+                  ) : null}
+                  {itineraryPdfUrl ? (
+                    <a
+                      href={itineraryPdfUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      download
+                      className="mt-4 inline-flex"
+                    >
+                      <Button type="button" variant="outline">
+                        Download itinerary PDF
+                      </Button>
+                    </a>
                   ) : null}
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-lg border bg-background px-4 py-3">

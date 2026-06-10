@@ -14,6 +14,7 @@ export interface GuestBooking {
   trip_name: string;
   package_type: string | null;
   package_name: string | null;
+  itinerary_pdf_url: string | null;
   total_trip_price: number;
   deposit_amount: number;
   balance_remaining: number;
