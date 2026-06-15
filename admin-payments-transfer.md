@@ -1,3 +1,32 @@
+# Admin Payments Layout Transfer Bundle
+
+Paste this whole file into Codex in the other repo. Ask it to copy the admin page layout and UI patterns only.
+
+## What to keep in the other repo
+
+- Keep the other repo's existing Supabase setup.
+- Keep the other repo's existing auth, routes, database schema, and data types.
+- Keep the other repo's existing table names and save/delete logic unless Codex confirms they need a small adapter.
+- Use this file as the visual/layout reference for the admin page.
+
+## UI pieces to copy
+
+- Admin page top spacing, heading, and action placement
+- Summary cards
+- Search and filter panel layout
+- Guest/payment list card layout
+- Payment badge styling, due-date display, and active-filter highlighting
+- Booking record form layout
+- Payment installments editor layout
+- Delete confirmation dialog styling
+
+## Important instruction for Codex in the other repo
+
+Do not replace Supabase config, env vars, schema migrations, auth callback, or app routing wholesale. Adapt the JSX, Tailwind classes, and local UI behavior from the component below to the existing admin page in that repo.
+
+## FILE: src/pages/AdminPayments.tsx
+
+```tsx
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
@@ -113,7 +142,6 @@ function isRoomSupplementPackage(type?: string | null) {
 const emptyBooking = {
   guest_name: "",
   guest_email: "",
-  guest_count: 1,
   trip_name: "",
   package_type: "",
   package_name: "",
@@ -324,7 +352,6 @@ export default function AdminPayments() {
       id: booking.id,
       guest_name: booking.guest_name || "",
       guest_email: booking.guest_email || "",
-      guest_count: Number(booking.guest_count || 1),
       trip_name: booking.trip_name || "",
       package_type: booking.package_type || "",
       package_name: booking.package_name || "",
@@ -450,7 +477,6 @@ export default function AdminPayments() {
     const payload = {
       guest_name: String(formData.get("guest_name") || ""),
       guest_email: String(formData.get("guest_email") || "").toLowerCase(),
-      guest_count: Math.max(1, Number(formData.get("guest_count") || 1)),
       trip_name: String(formData.get("trip_name") || ""),
       package_type: bookingForm.package_type || null,
       package_name: String(formData.get("package_name") || ""),
@@ -676,9 +702,6 @@ export default function AdminPayments() {
                       <div>
                         <p className="font-semibold text-foreground">{booking.guest_name}</p>
                         <p className="text-xs text-muted-foreground">{booking.guest_email}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {Number(booking.guest_count || 1)} {Number(booking.guest_count || 1) === 1 ? "guest" : "guests"}
-                        </p>
                         <p className="mt-1 text-sm text-primary">{booking.trip_name}</p>
                       </div>
                       <span className="text-sm font-semibold text-foreground">
@@ -752,7 +775,6 @@ export default function AdminPayments() {
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Input name="guest_name" value={bookingForm.guest_name} onChange={(e) => setBookingForm({ ...bookingForm, guest_name: e.target.value })} placeholder="Guest name" required />
                 <Input name="guest_email" type="email" value={bookingForm.guest_email} onChange={(e) => setBookingForm({ ...bookingForm, guest_email: e.target.value })} placeholder="Guest email" required />
-                <Input name="guest_count" type="number" min={1} step={1} value={bookingForm.guest_count} onChange={(e) => setBookingForm({ ...bookingForm, guest_count: Math.max(1, Number(e.target.value) || 1) })} placeholder="Number of guests" />
                 <Input name="trip_name" value={bookingForm.trip_name} onChange={(e) => setBookingForm({ ...bookingForm, trip_name: e.target.value })} placeholder="Trip name" required />
                 <Input name="package_name" value={bookingForm.package_name} onChange={(e) => setBookingForm({ ...bookingForm, package_name: e.target.value })} placeholder="Package / room summary" />
                 <Input name="itinerary_pdf_url" value={bookingForm.itinerary_pdf_url} onChange={(e) => setBookingForm({ ...bookingForm, itinerary_pdf_url: e.target.value })} placeholder="Itinerary PDF URL, e.g. /itineraries/texas-ladies-japan-itinerary.pdf" />
@@ -895,3 +917,4 @@ export default function AdminPayments() {
     </div>
   );
 }
+```

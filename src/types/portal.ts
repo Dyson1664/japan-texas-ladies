@@ -11,6 +11,7 @@ export interface GuestBooking {
   id: string;
   guest_name: string;
   guest_email: string;
+  guest_count: number | null;
   trip_name: string;
   package_type: string | null;
   package_name: string | null;
