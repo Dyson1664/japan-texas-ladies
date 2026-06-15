@@ -7,6 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -19,6 +30,12 @@ import type { GuestBooking, PaymentInstallment, PaymentStatus, PaymentType } fro
 
 const statuses: PaymentStatus[] = ["paid", "upcoming", "due_now", "pending_confirmation", "overdue"];
 const paymentTypes: PaymentType[] = ["deposit", "balance_1", "balance_2", "other"];
+const paymentTypeLabels: Record<PaymentType, string> = {
+  deposit: "Deposit",
+  balance_1: "Balance Payment 1",
+  balance_2: "Balance Payment 2",
+  other: "Other",
+};
 
 type PackageType =
   | "early_bird"
@@ -133,6 +150,19 @@ function money(value: number | null | undefined) {
   }).format(Number(value || 0));
 }
 
+function formatDueDate(value: string | null | undefined) {
+  if (!value) return "";
+
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}
+
 function toNumber(value: FormDataEntryValue | null) {
   return Number(value || 0);
 }
@@ -185,6 +215,8 @@ export default function AdminPayments() {
   const [installmentMessage, setInstallmentMessage] = useState("");
   const [installmentError, setInstallmentError] = useState("");
   const [isSavingInstallment, setIsSavingInstallment] = useState(false);
+  const [isDeletingBooking, setIsDeletingBooking] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [bookings, setBookings] = useState<GuestBooking[]>([]);
   const [installments, setInstallments] = useState<PaymentInstallment[]>([]);
   const [selectedBookingId, setSelectedBookingId] = useState<string>("");
@@ -192,6 +224,8 @@ export default function AdminPayments() {
   const [installmentForm, setInstallmentForm] = useState<InstallmentForm>(emptyInstallment);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [paymentTypeFilter, setPaymentTypeFilter] = useState<string>("all");
+  const [roomUpgradeFilter, setRoomUpgradeFilter] = useState<string>("all");
 
   function applyPackageTemplate(type: string) {
     const template = getPackageTemplate(type);
@@ -324,6 +358,17 @@ export default function AdminPayments() {
     };
   }
 
+  function matchesActivePaymentFilters(installment: PaymentInstallment) {
+    const hasStatusFilter = statusFilter !== "all";
+    const hasPaymentTypeFilter = paymentTypeFilter !== "all";
+
+    if (!hasStatusFilter && !hasPaymentTypeFilter) return false;
+
+    const matchesStatus = !hasStatusFilter || installment.status === statusFilter;
+    const matchesPaymentType = !hasPaymentTypeFilter || installment.payment_type === paymentTypeFilter;
+    return matchesStatus && matchesPaymentType;
+  }
+
   const selectedInstallments = installments.filter((item) => item.guest_booking_id === selectedBookingId);
 
   const filteredRows = useMemo(() => {
@@ -334,18 +379,38 @@ export default function AdminPayments() {
         .join(" ")
         .toLowerCase()
         .includes(term);
-      const matchesStatus =
-        statusFilter === "all" || bookingInstallments.some((item) => item.status === statusFilter);
-      return matchesSearch && matchesStatus;
+      const matchesPaymentFilters =
+        statusFilter === "all" && paymentTypeFilter === "all"
+          ? true
+          : bookingInstallments.some((item) => {
+              const matchesStatus = statusFilter === "all" || item.status === statusFilter;
+              const matchesPaymentType = paymentTypeFilter === "all" || item.payment_type === paymentTypeFilter;
+              return matchesStatus && matchesPaymentType;
+            });
+      const matchesRoomUpgrade =
+        roomUpgradeFilter === "all" ||
+        (roomUpgradeFilter === "upgraded" && booking.room_upgrade_enabled) ||
+        (roomUpgradeFilter === "standard" && !booking.room_upgrade_enabled);
+      return matchesSearch && matchesPaymentFilters && matchesRoomUpgrade;
     });
-  }, [bookings, installments, search, statusFilter]);
+  }, [bookings, installments, search, statusFilter, paymentTypeFilter, roomUpgradeFilter]);
 
   const paymentCounts = useMemo(() => {
+    const visibleBookingIds = new Set(filteredRows.map((booking) => booking.id));
+    const relevantInstallments =
+      paymentTypeFilter === "all"
+        ? installments.filter((item) => visibleBookingIds.has(item.guest_booking_id))
+        : installments.filter(
+            (item) => visibleBookingIds.has(item.guest_booking_id) && item.payment_type === paymentTypeFilter,
+          );
+
     return statuses.reduce((acc, status) => {
-      acc[status] = installments.filter((item) => item.status === status).length;
+      acc[status] = relevantInstallments.filter((item) => item.status === status).length;
       return acc;
     }, {} as Record<PaymentStatus, number>);
-  }, [installments]);
+  }, [filteredRows, installments, paymentTypeFilter]);
+
+  const summaryStatuses = paymentTypeFilter === "all" ? statuses.slice(1) : statuses;
 
   async function applyTemplateScheduleToBooking(bookingId: string, template: PackageTemplate) {
     if (!supabase) return;
@@ -466,6 +531,36 @@ export default function AdminPayments() {
     setIsSavingInstallment(false);
   }
 
+  async function deleteSelectedBooking() {
+    if (!supabase || !bookingForm.id) return;
+
+    setError("");
+    setMessage("");
+    setInstallmentError("");
+    setInstallmentMessage("");
+    setIsDeletingBooking(true);
+
+    const { error: deleteError } = await supabase
+      .from("guest_bookings")
+      .delete()
+      .eq("id", bookingForm.id);
+
+    if (deleteError) {
+      setError(deleteError.message);
+      setIsDeletingBooking(false);
+      return;
+    }
+
+    setBookings((current) => current.filter((booking) => booking.id !== bookingForm.id));
+    setInstallments((current) => current.filter((item) => item.guest_booking_id !== bookingForm.id));
+    setSelectedBookingId("");
+    setBookingForm(emptyBooking);
+    setInstallmentForm(emptyInstallment);
+    setMessage("Booking deleted.");
+    setIsDeletingBooking(false);
+    setIsDeleteDialogOpen(false);
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -498,7 +593,7 @@ export default function AdminPayments() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="mx-auto max-w-7xl px-4 pb-16 pt-24">
+      <main className="mx-auto max-w-7xl px-4 pb-16 pt-16">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-primary">Admin payments</h1>
@@ -522,7 +617,7 @@ export default function AdminPayments() {
         {error ? <div className="mb-4 rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">{error}</div> : null}
 
         <section className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {statuses.slice(1).map((status) => (
+          {summaryStatuses.map((status) => (
             <div key={status} className="rounded-xl border bg-card p-4">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">{status.replace("_", " ")}</p>
               <p className="mt-2 text-2xl font-bold text-foreground">{paymentCounts[status]}</p>
@@ -532,8 +627,8 @@ export default function AdminPayments() {
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="rounded-xl border bg-card p-4 shadow-sm">
-            <div className="grid gap-3 sm:grid-cols-[1fr_180px]">
-              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search guest, email, trip" />
+            <div className="grid gap-3 md:grid-cols-3">
+              <Input className="md:col-span-3" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search guest, email, trip" />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -541,6 +636,23 @@ export default function AdminPayments() {
                   {statuses.map((status) => (
                     <SelectItem key={status} value={status}>{status.replace("_", " ")}</SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+              <Select value={paymentTypeFilter} onValueChange={setPaymentTypeFilter}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All payments</SelectItem>
+                  {paymentTypes.map((type) => (
+                    <SelectItem key={type} value={type}>{paymentTypeLabels[type]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={roomUpgradeFilter} onValueChange={setRoomUpgradeFilter}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All rooms</SelectItem>
+                  <SelectItem value="upgraded">Room upgrade</SelectItem>
+                  <SelectItem value="standard">No room upgrade</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -568,11 +680,24 @@ export default function AdminPayments() {
                       </span>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {bookingInstallments.map((item) => (
-                        <span key={item.id} className="rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
-                          {item.payment_label}: {item.status.replace("_", " ")}
-                        </span>
-                      ))}
+                      {bookingInstallments.map((item) => {
+                        const dueDate = formatDueDate(item.due_date);
+                        const isMatch = matchesActivePaymentFilters(item);
+
+                        return (
+                          <span
+                            key={item.id}
+                            className={`rounded-full px-2 py-1 text-[11px] ${
+                              isMatch
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground"
+                            }`}
+                          >
+                            {item.payment_label || paymentTypeLabels[item.payment_type]}: {item.status.replace("_", " ")}
+                            {dueDate ? ` - Due ${dueDate}` : ""}
+                          </span>
+                        );
+                      })}
                     </div>
                   </button>
                 );
@@ -644,7 +769,37 @@ export default function AdminPayments() {
                 </div>
               </div>
 
-              <Button className="mt-4" type="submit">Save booking</Button>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button type="submit">Save booking</Button>
+                {bookingForm.id ? (
+                  <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                    <AlertDialogTrigger asChild>
+                      <Button type="button" variant="destructive" disabled={isDeletingBooking}>
+                        Delete booking
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete this booking?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete the booking for{" "}
+                          {bookingForm.guest_name || "this guest"} and remove their payment installments.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeletingBooking}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          onClick={deleteSelectedBooking}
+                          disabled={isDeletingBooking}
+                        >
+                          {isDeletingBooking ? "Deleting..." : "Yes, delete booking"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : null}
+              </div>
             </form>
 
             <section className="rounded-xl border bg-card p-5 shadow-sm">
@@ -681,7 +836,7 @@ export default function AdminPayments() {
                   <Select value={installmentForm.payment_type} onValueChange={(value: PaymentType) => setInstallmentForm({ ...installmentForm, payment_type: value })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {paymentTypes.map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                      {paymentTypes.map((type) => <SelectItem key={type} value={type}>{paymentTypeLabels[type]}</SelectItem>)}
                     </SelectContent>
                   </Select>
                   <Input name="base_amount" type="number" step="0.01" value={installmentForm.base_amount} onChange={(e) => setInstallmentForm({ ...installmentForm, base_amount: Number(e.target.value) })} placeholder="Base amount" />
