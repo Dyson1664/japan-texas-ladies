@@ -412,6 +412,10 @@ export default function AdminPayments() {
     }, {} as Record<PaymentStatus, number>);
   }, [filteredRows, installments, paymentTypeFilter]);
 
+  const totalVisibleGuests = useMemo(() => {
+    return filteredRows.reduce((total, booking) => total + Number(booking.guest_count || 1), 0);
+  }, [filteredRows]);
+
   const summaryStatuses = paymentTypeFilter === "all" ? statuses.slice(1) : statuses;
 
   async function applyTemplateScheduleToBooking(bookingId: string, template: PackageTemplate) {
@@ -620,6 +624,10 @@ export default function AdminPayments() {
         {error ? <div className="mb-4 rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">{error}</div> : null}
 
         <section className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border bg-card p-4">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Guests</p>
+            <p className="mt-2 text-2xl font-bold text-foreground">{totalVisibleGuests}</p>
+          </div>
           {summaryStatuses.map((status) => (
             <div key={status} className="rounded-xl border bg-card p-4">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">{status.replace("_", " ")}</p>
